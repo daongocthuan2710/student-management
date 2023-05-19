@@ -1,0 +1,21 @@
+# @baseUrl1 = http://js-post-api.herokuapp.com/api
+@baseUrl = https://vapi.vnappmob.com/api/province
+@easyFeUrl = http://js-post-api.herokuapp.com/api
+@province_id = 79
+@district_id = 785
+# Cities
+
+# @name getAllCities
+GET {{easyFeUrl}}/cities
+
+# @name getAllProvinces
+
+GET {{baseUrl}}
+
+# @name getAllDistricts
+
+GET {{baseUrl}}/district/{{province_id}}
+
+# @name getAllWards
+
+GET {{baseUrl}}/ward/{{district_id}}
