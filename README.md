@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+#### Link Requirements: https://docs.google.com/document/d/1mCeV-Xhd6fItK9pDhBXN9PmecJZY26VRsXWTTUwGaqs/edit?usp=sharing
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
 
 ## Available Scripts
