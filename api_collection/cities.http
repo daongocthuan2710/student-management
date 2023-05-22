@@ -7,15 +7,12 @@
 
 # @name getAllCities
 GET {{easyFeUrl}}/cities
-
+###
 # @name getAllProvinces
-
 GET {{baseUrl}}
-
+###
 # @name getAllDistricts
-
 GET {{baseUrl}}/district/{{province_id}}
-
+###
 # @name getAllWards
-
 GET {{baseUrl}}/ward/{{district_id}}
