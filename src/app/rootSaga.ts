@@ -2,6 +2,8 @@ import counterSaga from '../features/counter/counterSaga';
 import { put, delay, takeEvery } from 'redux-saga/effects';
 import {all} from 'redux-saga/effects';
 import { authSaga } from '../features/auth/authSaga';
+import dashboardSaga from '../features/Dashboard/dashboardSaga';
+import studentSaga from '../features/Student/studentSaga';
 
 function* helloSaga(){
     console.log("Hello saga");   
@@ -23,6 +25,8 @@ export default function* rootSaga(){
     yield all([
         helloSaga(), 
         authSaga(),
+        studentSaga(),
+        dashboardSaga(),
         watchIncrementAsync(),
         counterSaga()
     ])
