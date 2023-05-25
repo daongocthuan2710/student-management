@@ -8,24 +8,24 @@ const studentApi = {
         return axiosClient.get(url, { params })
     },
 
-    getById(id: string): Promise<any> {
+    getById(id: string): Promise<Student> {
         const url = `/students/${id}`
         return axiosClient.get(url)
     },
 
-    add(data: Student): Promise<ListResponse<Student>> {
+    add(data: Student): Promise<Student> {
         const url = '/students'
-        return axiosClient.get(url, { data })
+        return axiosClient.post(url, data)
     },
 
-    update(data: Student): Promise<ListResponse<Student>> {
-        const url = '/students'
-        return axiosClient.get(url, { data })
+    update({data,id}:{data: {}, id: String}): Promise<Student> {
+        const url = `/students/${id}`
+        return axiosClient.patch(url, data)
     },
 
     delete(id: string): Promise<any> {
         const url = `/students/${id}`
-        return axiosClient.get(url)
+        return axiosClient.delete(url)
     }
 }
 

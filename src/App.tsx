@@ -12,7 +12,7 @@ function App() {
           <Login/>
         </Route>
 
-        <PrivateRoute>
+        <PrivateRoute path='/admin'>
           <Admin/>
         </PrivateRoute>
 

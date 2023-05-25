@@ -5,6 +5,7 @@ export interface Student{
     mark: number,
     gender: 'male' | 'female',
     city: string,
-    created_at?: number,
-    updated_at?: number
+    tags?: string[];
+    createdAt?: number,
+    updatedAt?: number
 }

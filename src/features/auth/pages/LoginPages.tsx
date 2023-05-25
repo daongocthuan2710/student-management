@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Button, Spin, Form, Input, Checkbox  } from 'antd';
 import { authActions, selectIslogging } from '../authSlice';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';

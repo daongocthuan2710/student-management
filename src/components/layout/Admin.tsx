@@ -1,18 +1,23 @@
 import * as React from 'react';
+
+import { useAppDispatch } from '../../app/hooks';
+import { authActions } from '../../features/auth/authSlice';
+// Antd
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
-import { useAppDispatch } from '../../app/hooks';
-import { authActions } from '../../features/auth/authSlice';
-import { Route, Switch } from 'react-router-dom';
+// Components
 import { Dashboard } from '../../features/Dashboard';
-import { Student } from '../../features/Student';
+import StudentRoute from '../../features/Student/StudentRoute';
+// Navigation
+import {Link} from "react-router-dom";
+import { Route, Switch } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items1: MenuProps['items'] = ['Dashboard', 'Student', '3'].map((key) => ({
+const items1: MenuProps['items'] = ['Dashboard', 'Students', '3'].map((key) => ({
   key,
-  label: `${key}`,
+  label: <Link to={`/admin/${key.toLowerCase()}`}>{key}</Link>
 }));
 
 const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
@@ -55,12 +60,12 @@ export function Admin (props: AdminProps) {
         <Button style={{}} onClick={() => dispatch(authActions.logout())}>Logout</Button>
       </Header>
       <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
+        {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-        </Breadcrumb>
+        </Breadcrumb> */}
         <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
-          <Sider style={{ background: colorBgContainer }} width={200}>
+          {/* <Sider style={{ background: colorBgContainer }} width={200}>
             <Menu
               mode="inline"
               defaultSelectedKeys={['1']}
@@ -68,14 +73,14 @@ export function Admin (props: AdminProps) {
               style={{ height: '100%' }}
               items={items2}
             />
-          </Sider>
+          </Sider> */}
           <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <Switch>
               <Route path='/admin/dashboard'>
                 <Dashboard />
               </Route>
               <Route path='/admin/students'>
-                <Student />
+                <StudentRoute />
               </Route>
             </Switch>
           </Content>

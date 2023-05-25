@@ -1,7 +1,7 @@
 export interface PagingnationParams{
-    _limit: number;
-    _page: number;
-    _totalRows: number;
+    _limit: number,
+    _page: number,
+    _totalRows: number,
 }
 
 export interface ListResponse<T>{
