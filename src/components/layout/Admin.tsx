@@ -1,50 +1,59 @@
-import * as React from 'react';
+// Libraries
+import * as React from "react";
+import { Link, Route, Switch } from "react-router-dom";
 
-import { useAppDispatch } from '../../app/hooks';
-import { authActions } from '../../features/auth/authSlice';
+// Hooks
+import { useAppDispatch } from "../../app/hooks/hooks";
+import { authActions } from "../../app/modules/auth/slice";
+
 // Antd
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Button, Layout, Menu, theme } from 'antd';
+import {
+  LaptopOutlined,
+  NotificationOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
+
 // Components
-import { Dashboard } from '../../features/Dashboard';
-import StudentRoute from '../../features/Student/StudentRoute';
-// Navigation
-import {Link} from "react-router-dom";
-import { Route, Switch } from 'react-router-dom';
+import { Dashboard } from "../../app/modules/Dashboard";
+import StudentRoute from "../../app/modules/Student/StudentRoute";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items1: MenuProps['items'] = ['Dashboard', 'Students', '3'].map((key) => ({
-  key,
-  label: <Link to={`/admin/${key.toLowerCase()}`}>{key}</Link>
-}));
-
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      }),
-    };
-  },
+const items1: MenuProps["items"] = ["Dashboard", "Students", "3"].map(
+  (key) => ({
+    key,
+    label: <Link to={`/admin/${key.toLowerCase()}`}>{key}</Link>,
+  })
 );
 
-export interface AdminProps {
-}
+const items2: MenuProps["items"] = [
+  UserOutlined,
+  LaptopOutlined,
+  NotificationOutlined,
+].map((icon, index) => {
+  const key = String(index + 1);
 
-export function Admin (props: AdminProps) {
+  return {
+    key: `sub${key}`,
+    icon: React.createElement(icon),
+    label: `subnav ${key}`,
+
+    children: new Array(4).fill(null).map((_, j) => {
+      const subKey = index * 4 + j + 1;
+
+      return {
+        key: subKey,
+        label: `option${subKey}`,
+      };
+    }),
+  };
+});
+
+export interface AdminProps {}
+
+export function Admin(props: AdminProps) {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -52,19 +61,33 @@ export function Admin (props: AdminProps) {
   const dispatch = useAppDispatch();
   return (
     <Layout>
-      <Header style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between'}}>
-        <div style={{ display: 'flex', alignItems: 'center'}}>
-          <h1 style={{color: 'white'}}>Student Management</h1>
-          <Menu style={{marginLeft:'15px'}} theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <h1 style={{ color: "white" }}>Student Management</h1>
+          <Menu
+            style={{ marginLeft: "15px" }}
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["2"]}
+            items={items1}
+          />
         </div>
-        <Button style={{}} onClick={() => dispatch(authActions.logout())}>Logout</Button>
+        <Button style={{}} onClick={() => dispatch(authActions.logout())}>
+          Logout
+        </Button>
       </Header>
-      <Content style={{ padding: '0 50px' }}>
+      <Content style={{ padding: "0 50px" }}>
         {/* <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
         </Breadcrumb> */}
-        <Layout style={{ padding: '24px 0', background: colorBgContainer }}>
+        <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
           {/* <Sider style={{ background: colorBgContainer }} width={200}>
             <Menu
               mode="inline"
@@ -74,19 +97,21 @@ export function Admin (props: AdminProps) {
               items={items2}
             />
           </Sider> */}
-          <Content style={{ padding: '0 24px', minHeight: 280 }}>
+          <Content style={{ padding: "0 24px", minHeight: 280 }}>
             <Switch>
-              <Route path='/admin/dashboard'>
+              <Route path="/admin/dashboard">
                 <Dashboard />
               </Route>
-              <Route path='/admin/students'>
+              <Route path="/admin/students">
                 <StudentRoute />
               </Route>
             </Switch>
           </Content>
         </Layout>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: "center" }}>
+        Ant Design ©2023 Created by Ant UED
+      </Footer>
     </Layout>
   );
 }
