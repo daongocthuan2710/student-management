@@ -1,8 +1,8 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
-import { RankingByCity, dashboardActions } from "./dashboardSlice";
-import { City, ListResponse, Student } from "../../models";
-import studentApi from "../../../api/studentApi";
-import cityApi from "../../../api/cityApi";
+import { RankingByCity, dashboardActions } from ".";
+import { City, ListResponse, Student } from "../../../../../models";
+import studentApi from "../../../../../../api/studentApi";
+import cityApi from "../../../../../../api/cityApi";
 
 function* fetchStatisttics() {
   const responseList: Array<ListResponse<Student>> = yield all([

@@ -8,11 +8,11 @@ import { push } from "connected-react-router";
 import { call, put, takeLatest } from "redux-saga/effects";
 
 // Slices
-import { studentActions } from "./studentSlice";
+import { studentActions } from ".";
 
 // Constants
 import { ACTIONS } from "./sagaActions";
-import { MESSAGE } from "../../../constants";
+import { MESSAGE } from "../../../../../../constants";
 
 // Types
 import {
@@ -22,19 +22,25 @@ import {
   TUpdateStudentListPayload,
   TDeleteStudentListPayload,
   TGetStudentListPayload,
-} from "./types";
-import { City, ListResponse, Student, TCity, TStudent } from "../../models";
+} from "../types";
+import {
+  City,
+  ListResponse,
+  Student,
+  TCity,
+  TStudent,
+} from "../../../../../models";
 
 // Call Apis
-import cityApi from "../../../api/cityApi";
-import studentApi from "../../../api/studentApi";
+import cityApi from "../../../../../../api/cityApi";
+import studentApi from "../../../../../../api/studentApi";
 
 function* createStudent(action: TAction<TCreateStudentPayload>) {
   try {
     yield put(studentActions.setCreateLoading(true));
     const data: Student = yield call(studentApi.add, action.payload);
     if (data !== undefined) {
-      yield put(push("/admin/students"));
+      yield put(push("/dashboard/students"));
       message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
     }
     yield put(studentActions.setCreateLoading(false));
@@ -48,13 +54,11 @@ function* createStudent(action: TAction<TCreateStudentPayload>) {
 function* deleteStudent(action: TAction<TDeleteStudentListPayload>) {
   try {
     yield put(studentActions.setDeleteLoading(true));
-
     const data: Student = yield call(studentApi.delete, action.payload.id);
     if (data !== undefined) {
-      yield put(push("/admin/students"));
+      yield put({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {}});
       message.success(MESSAGE.DELETE_SUCCESS, MESSAGE.DURATION);
     }
-
     yield put(studentActions.setDeleteLoading(false));
   } catch (err) {
     console.log("Failed to fetch student data", err);
@@ -68,7 +72,7 @@ function* updateStudent(action: TAction<TUpdateStudentListPayload>) {
     yield put(studentActions.setUpdateLoading(true));
     const data: Student = yield call(studentApi.update, action.payload);
     if (data !== undefined) {
-      yield put(push("/admin/students"));
+      yield put(push("/dashboard/students"));
       message.success(MESSAGE.UPDATE_SUCCESS, MESSAGE.DURATION);
     }
     yield put(studentActions.setUpdateLoading(false));

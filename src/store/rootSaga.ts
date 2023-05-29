@@ -1,9 +1,9 @@
-import counterSaga from "../app/modules/counter/counterSaga";
+import counterSaga from "../app/modules/Dashboard/containers/counter/counterSaga";
 import { all } from "redux-saga/effects";
 import { authSaga } from "../app/modules/auth/slice/saga";
-import dashboardSaga from "../app/modules/Dashboard/dashboardSaga";
-import studentSaga from "../app/modules/Student/studentSaga";
+import dashboardSaga from "../app/modules/Dashboard/containers/dasboardTemp/slice/saga";
+import studentSaga from "../app/modules/Dashboard/containers/StudentManagement/slice/saga";
 
 export default function* rootSaga() {
-  yield all([authSaga(), studentSaga(), dashboardSaga(), counterSaga()]);
+  yield all([studentSaga(), authSaga(), dashboardSaga(), counterSaga()]);
 }

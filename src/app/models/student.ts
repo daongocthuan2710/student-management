@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { Model } from "./model";
-import { DATE_TIME_FORMAT } from "../../constants/datetime";
+// import { DATE_TIME_FORMAT } from "../../constants/datetime";
 dayjs().format();
 
 export type TStudent = {
@@ -25,11 +25,11 @@ export class Student extends Model<TStudent> {
   }
 
   get age() {
-    return this.model.age || "";
+    return this.model.age || 0;
   }
 
   get mark() {
-    return this.model.mark || "";
+    return this.model.mark || 0;
   }
 
   get gender() {
@@ -46,13 +46,13 @@ export class Student extends Model<TStudent> {
 
   get createdAt() {
     return dayjs(this.model.createdAt).isValid()
-      ? dayjs(this.model.createdAt).format(DATE_TIME_FORMAT.DATE_TIME)
+      ? dayjs(this.model.createdAt).format("DD/MM/YYYY - HH:mm:ss")
       : "-";
   }
 
   get updatedAt() {
     return dayjs(this.model.updatedAt).isValid()
-      ? dayjs(this.model.updatedAt).format(DATE_TIME_FORMAT.DATE_TIME)
+      ? dayjs(this.model.updatedAt).format("DD/MM/YYYY - HH:mm:ss")
       : "-";
   }
 }

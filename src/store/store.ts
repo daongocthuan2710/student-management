@@ -7,10 +7,10 @@ import {
 } from "@reduxjs/toolkit";
 
 // Reducers
-import counterReducer from "../app/modules/counter/counterSlice";
+import counterReducer from "../app/modules/Dashboard/containers/counter/counterSlice";
 import authReducer from "../app/modules/auth/slice";
-import dashboardReducer from "../app/modules/Dashboard/dashboardSlice";
-import studentReducer from "../app/modules/Student/studentSlice";
+import dashboardReducer from "../app/modules/Dashboard/containers/dasboardTemp/slice";
+import studentReducer from "../app/modules/Dashboard/containers/StudentManagement/slice";
 
 // Saga
 import createSagaMiddleware from "redux-saga";

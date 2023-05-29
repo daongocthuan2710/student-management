@@ -1,4 +1,4 @@
-import { Student } from "../../models";
+import { Student } from "../../../../../models";
 
 export type TCreateStudentPayload = Student;
 

@@ -1,37 +1,48 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
 
 // Slice
 import {
   selectStudentDeleteLoading,
   selectStudentList,
   selectStudentListLoading,
-} from "./studentSlice";
+} from "../../slice";
 
 // Ant Libs
-import { Modal, Space, Table, Tag, message } from "antd";
+import { Modal, Space, Table, Tag} from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { Student } from "../../models";
 import {
   DeleteOutlined,
   EditOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { ACTIONS } from "./sagaActions";
+import { ACTIONS } from "../../slice/sagaActions";
+
+type TRecord = {
+  key: string;
+  name: string;
+  age: number;
+  mark: number;
+  gender: "male" | "female" | "";
+  city: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+};
 
 export interface StudentProps {}
 
-function StudentPage(props: StudentProps) {
+function StudentTable(props: StudentProps) {
   const dispatch = useAppDispatch();
   const listedLoading = useAppSelector(selectStudentListLoading);
   const deletedLoading = useAppSelector(selectStudentDeleteLoading);
-  const { data: studentList, pagination } = useAppSelector(selectStudentList);
+  const { data, pagination } = useAppSelector(selectStudentList);
   const [open, setOpen] = useState(false);
   const [studentId, setStudentId] = useState("");
 
-  const columns: ColumnsType<Student> = [
+  const columns: ColumnsType<TRecord> = [
     {
       title: "Name",
       dataIndex: "name",
@@ -93,12 +104,12 @@ function StudentPage(props: StudentProps) {
     {
       title: "Action",
       key: "action",
-      render: (_, { id }) => (
+      render: (_, { key }) => (
         <Space size="middle">
-          <Link to={`/admin/students/edit-student/${id}`}>
+          <Link to={`/dashboard/students/edit-student/${key}`}>
             Edit <EditOutlined />
           </Link>
-          <a onClick={() => showModal(id)}>
+          <a onClick={() => showModal(key)}>
             Delete <DeleteOutlined />
           </a>
         </Space>
@@ -113,6 +124,7 @@ function StudentPage(props: StudentProps) {
 
   const handleRemoveStudent = () => {
     dispatch({ type: ACTIONS.DELETE_STUDENT, payload: { id: studentId } });
+    setOpen(false);
   };
 
   const handleFetchData = (page: number, pageSize: number) => {
@@ -121,6 +133,18 @@ function StudentPage(props: StudentProps) {
       payload: { page: page, limit: pageSize },
     });
   };
+
+  const studentList: TRecord[] = data.map((item) => ({
+    key: item.id,
+    name: item.name,
+    age: item.age,
+    mark: item.mark,
+    gender: item.gender,
+    city: item.city,
+    tags: item.tags,
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  }));
 
   useEffect(() => {
     dispatch(() => {
@@ -132,7 +156,7 @@ function StudentPage(props: StudentProps) {
     <>
       <div style={{ padding: "15px" }}>
         <Link
-          to="/admin/students/create-new-student"
+          to="/dashboard/students/create-new-student"
           style={{ fontSize: "25px" }}
         >
           <UserAddOutlined />
@@ -156,7 +180,7 @@ function StudentPage(props: StudentProps) {
         okText="Yes"
         cancelText="No"
         width="300px"
-        open={open}
+        open={open || deletedLoading}
         onOk={handleRemoveStudent}
         confirmLoading={deletedLoading}
         onCancel={() => setOpen(false)}
@@ -165,4 +189,4 @@ function StudentPage(props: StudentProps) {
   );
 }
 
-export default StudentPage;
+export default StudentTable;

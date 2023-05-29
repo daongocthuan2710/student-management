@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
-import { Storage } from '../../constants';
+import * as React from "react";
+import { Redirect, Route, RouteProps } from "react-router-dom";
+import { STORAGE } from "../../constants/storage";
 
-export interface PrivateRouteProps extends RouteProps {
+export interface PrivateRouteProps extends RouteProps {}
 
-}
+export default function PrivateRoute(props: PrivateRouteProps) {
+  const isLoggedIn = Boolean(localStorage.getItem(STORAGE.ACCESS_TOKEN));
 
-export function PrivateRoute (props: PrivateRouteProps) {
-  const isLoggedIn = Boolean(localStorage.getItem(Storage.ACCESS_TOKEN))
-  if (!isLoggedIn) return <Redirect to='/login' />
- 
+  if (!isLoggedIn) return <Redirect to="/login" />;
+
   return <Route {...props} />;
 }

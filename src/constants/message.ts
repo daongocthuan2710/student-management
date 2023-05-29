@@ -1,4 +1,3 @@
-
 export const MESSAGE = {
   DURATION: 2,
   CREATE_SUCCESS: "Created successfully",

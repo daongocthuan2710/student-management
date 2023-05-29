@@ -1,16 +1,16 @@
 import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { ACTIONS } from "./sagaActions";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
+import { ACTIONS } from "../../slice/sagaActions";
 import { useParams } from "react-router-dom";
 import {
   selectCityList,
   selectStudentGetLoading,
   selectStudentUpdate,
   selectStudentUpdateLoading,
-} from "./studentSlice";
+} from "../../slice";
 
-export default function EditStudent() {
+export default function UpdateStudentInfo() {
   const dispatch = useAppDispatch();
   const getLoading = useAppSelector(selectStudentGetLoading);
   const updateLoading = useAppSelector(selectStudentUpdateLoading);
@@ -92,12 +92,12 @@ export default function EditStudent() {
               initialValue={student.city}
               rules={[{ required: true, message: "Please choose the city!" }]}
             >
-              {/* <Select>
+              <Select>
                 {cityList.length > 0 ?
                 cityList.map((item) => (
                   <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                 )) : ''}    
-              </Select> */}
+              </Select>
             </Form.Item>
             <Form.Item
               label="Age"

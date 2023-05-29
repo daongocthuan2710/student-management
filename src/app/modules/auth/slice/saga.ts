@@ -16,32 +16,41 @@ function* handleLogin(payload: LoginPayload) {
       })
     );
     // Redirect to Admin Dashboard
-    yield put(push("/admin/dashboard"));
+    yield put(push("/dashboard"));
   } catch (err) {
     yield put(authActions.loginFailed("Cannot Handle Login!"));
   }
 }
 
 function* handleLogout() {
-  delay(100);
-  console.log("Handle Logout");
-  localStorage.removeItem(STORAGE.ACCESS_TOKEN);
-  // Redirect to Login Dashboard
-  yield put(push("/login"));
+  try {
+    delay(100);
+    console.log("Handle Logout");
+    localStorage.removeItem(STORAGE.ACCESS_TOKEN);
+    // Redirect to Login
+    yield put(push("/login"));
+  } catch (error) {
+    console.log("Faild to Logout!", error);
+  }
 }
 
 function* watchLoginFlow() {
-  console.log("Watch Login");
-  while (true) {
-    const isLoggedIn = Boolean(localStorage.getItem(STORAGE.ACCESS_TOKEN));
-    if (!isLoggedIn) {
-      const action: PayloadAction<LoginPayload> = yield take(
-        authActions.login.type
-      );
-      yield fork(handleLogin, action.payload);
+  try {
+    console.log("Watch Login");
+    while (true) {
+      const isLoggedIn = Boolean(localStorage.getItem(STORAGE.ACCESS_TOKEN));
+
+      if (!isLoggedIn) {
+        const action: PayloadAction<LoginPayload> = yield take(
+          authActions.login.type
+        );
+        yield fork(handleLogin, action.payload);
+      }
+      yield take(authActions.logout.type);
+      yield call(handleLogout);
     }
-    yield take(authActions.logout.type);
-    yield call(handleLogout);
+  } catch (error) {
+    console.log("Faild to login!", error);
   }
 }
 

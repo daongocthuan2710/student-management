@@ -1,9 +1,9 @@
 import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
-import { Student } from "../../models";
-import { ACTIONS } from "./sagaActions";
-import { selectCityList, selectStudentCreateLoading } from "./studentSlice";
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
+import { Student } from "../../../../../../models";
+import { ACTIONS } from "../../slice/sagaActions";
+import { selectCityList, selectStudentCreateLoading } from "../../slice";
 
 export default function CreateNewStudent() {
   const dispatch = useAppDispatch();
@@ -15,7 +15,6 @@ export default function CreateNewStudent() {
   }, [dispatch]);
 
   const onFinish = (values: Student) => {
-    console.log("Success:", values);
     const data: Student = {
       name: values.name,
       age: values.age,
@@ -72,12 +71,12 @@ export default function CreateNewStudent() {
             initialValue="Hồ Chí Minh"
             rules={[{ required: true, message: "Please choose the city!" }]}
           >
-            {/* <Select>
+            <Select>
             {cityList.length > 0 ?
             cityList.map((item) => (
               <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
             )) : ''}    
-          </Select> */}
+          </Select>
           </Form.Item>
           <Form.Item
             label="Age"

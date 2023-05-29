@@ -1,9 +1,9 @@
 // Redux
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../../../store/store";
+import { RootState } from "../../../../../../store/store";
 
 // Types
-import { City, ListResponse, Student } from "../../models";
+import { City, ListResponse, Student } from "../../../../../models";
 
 export interface StudentState {
   loading: {

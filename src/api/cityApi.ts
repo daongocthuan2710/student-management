@@ -1,5 +1,5 @@
 import { TCity } from "../app/models";
-import { ListResponse } from "../app/models/common";
+import { ListResponse } from "../types/common";
 import axiosClient from "./axiosClient";
 
 const cityApi = {

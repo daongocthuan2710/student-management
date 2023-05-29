@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Student } from "../../models";
-import { RootState } from "../../../store/store";
+import { Student } from "../../../../../models";
+import { RootState } from "../../../../../../store/store";
 
 export interface DashboardStatistics {
   maleCount: number;
