@@ -1,50 +1,80 @@
-import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
-import { ACTIONS } from "../../slice/sagaActions";
 import { useParams } from "react-router-dom";
+import { push } from "connected-react-router";
+
+// Antd
 import {
-  selectCityList,
-  selectStudentGetLoading,
-  selectStudentUpdate,
-  selectStudentUpdateLoading,
-} from "../../slice";
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+  Spin,
+  message,
+} from "antd";
+
+// Hooks
+import { useAppDispatch } from "../../../../../../hooks/hooks";
+import { useUpdateStudent } from "../../hooks/useUpdateStudent";
+import { useGetStudent } from "../../hooks/useGetStudent";
+import { useGetListCities } from "../../hooks/useGetListCities";
+
+// Constants
+import { ACTIONS } from "../../slice/sagaActions";
+import { MESSAGE } from "../../../../../../../constants";
+import { ROUTES } from "../../../../../../../constants/routes";
+
+// Styled
 import { FormCustom, CenterBlock } from "../../../../../styled";
+
+// Types
+import { TUpdateStudent } from "./type";
+import { Student } from "../../../../../../models";
 
 export default function UpdateStudentInfo() {
   const dispatch = useAppDispatch();
-  const getLoading = useAppSelector(selectStudentGetLoading);
-  const updateLoading = useAppSelector(selectStudentUpdateLoading);
-  const { data: cityList } = useAppSelector(selectCityList);
+  // Get List Cities
+  const { data: cities } = useGetListCities();
+  const cityList = cities?.data || [];
 
-  useEffect(() => {
-    dispatch({ type: ACTIONS.FETCH_CITY_DATA });
-  }, [dispatch]);
+  // Get student Info
+  const { id } = useParams<{ id: string }>();
+  const { data: student = new Student({}), isLoading: getLoading } =
+    useGetStudent({ id });
+
+  const { mutate, isLoading, isError, isSuccess } = useUpdateStudent();
+
+  if (isSuccess) {
+    message.success(MESSAGE.UPDATE_SUCCESS, MESSAGE.DURATION);
+    dispatch(push(ROUTES.STUDENT.path));
+  }
+
+  if (isError) {
+    message.success(MESSAGE.UPDATE_FAILED, MESSAGE.DURATION);
+  }
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
-    const student = {
+    const oldStudent: TUpdateStudent = {
       id: id,
       data: values,
     };
-
-    dispatch({ type: ACTIONS.UPDATE_STUDENT, payload: student });
+    mutate(oldStudent);
+    // dispatch({ type: ACTIONS.UPDATE_STUDENT, payload: oldStudent });
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
-  const { id } = useParams<{ id: string }>();
-  const student = useAppSelector(selectStudentUpdate);
-
   useEffect(() => {
-    dispatch({ type: ACTIONS.FETCH_STUDENT_BY_ID, payload: { id: id } });
-  }, [dispatch, id]);
+    dispatch({ type: ACTIONS.FETCH_CITY_DATA });
+    // dispatch({ type: ACTIONS.FETCH_STUDENT_BY_ID, payload: { id: id } });
+  }, [dispatch]);
 
   return (
     <>
-      {getLoading ? (
+      {getLoading && student === undefined ? (
         <CenterBlock>
           <Spin />
         </CenterBlock>
@@ -83,7 +113,7 @@ export default function UpdateStudentInfo() {
             <Form.Item
               label="City"
               name="city"
-              initialValue={student.city}
+              initialValue="hcm"
               rules={[{ required: true, message: "Please choose the city!" }]}
             >
               <Select>
@@ -113,8 +143,8 @@ export default function UpdateStudentInfo() {
               <InputNumber />
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-              <Button type="primary" htmlType="submit" disabled={updateLoading}>
-                {updateLoading && (
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
+                {isLoading && (
                   <>
                     <Spin /> &ensp;
                   </>

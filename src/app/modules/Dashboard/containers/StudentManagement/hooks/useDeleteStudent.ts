@@ -1,6 +1,6 @@
 // Libs
-import { useMutation } from "@tanstack/react-query";
 import { push } from "connected-react-router";
+import { useMutation } from "@tanstack/react-query";
 import { message } from "antd";
 
 // Apis
@@ -13,18 +13,18 @@ import { useAppDispatch } from "../../../../../hooks/hooks";
 import { MESSAGE } from "../../../../../../constants";
 import { ROUTES } from "../../../../../../constants/routes";
 
-export function useCreateStudent() {
+export function useDeleteStudent() {
   const dispatch = useAppDispatch();
 
   return useMutation({
-    mutationFn: studentApi.add,
-    onMutate: (newStudent) => {
+    mutationFn: studentApi.delete,
+    onMutate: (studentId) => {
       // A mutation is about to happen!
       // Optionally return a context containing data to use when for example rolling back
     },
     onError: (error, variables, context) => {
       // An error happened!
-      message.success(MESSAGE.CREATE_FAILED, MESSAGE.DURATION);
+      message.success(MESSAGE.DELETE_FAILED, MESSAGE.DURATION);
     },
     onSuccess: (data, variables, context) => {
       // Boom baby!

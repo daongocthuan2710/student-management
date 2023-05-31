@@ -26,7 +26,8 @@ const studentManagementRoutes: Routes = [
     isPrivate: ROUTES.STUDENT_UPDATE.isPrivate,
     component: UpdateStudentInfo,
   },
-  // Must be finally called
+
+  // Must be finally called because when the path don't match the above ones, it will redirect to this component
   {
     key: ROUTES.STUDENT.key,
     name: ROUTES.STUDENT.name,

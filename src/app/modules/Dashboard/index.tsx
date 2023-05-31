@@ -15,7 +15,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme } from "antd";
 
 // Components
 import PrivateRoute from "../../components/common/PrivateRoute";
@@ -23,8 +23,9 @@ import PrivateRoute from "../../components/common/PrivateRoute";
 // Constants
 import dashboardRoutes from "./routes";
 import { DashboardHeader } from "./styled";
+import BreadcrumbCustom from "../../components/Breadcrumb";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const navItems: MenuProps["items"] = dashboardRoutes.map((route) => ({
   key: route.name,
@@ -66,7 +67,7 @@ export function Dashboard(props: DashboardProps) {
     <Layout>
       <DashboardHeader>
         <div className="_title">
-          <h1>Student Management</h1>
+          <h1><Link to="/">Student Management</Link></h1>
           <Menu
             style={{ marginLeft: "15px" }}
             theme="dark"
@@ -80,10 +81,7 @@ export function Dashboard(props: DashboardProps) {
         </Button>
       </DashboardHeader>
       <Content style={{ padding: "0 50px" }}>
-        <Breadcrumb style={{ margin: "16px 0" }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-        </Breadcrumb>
+        <BreadcrumbCustom />
         <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
           <Sider style={{ background: colorBgContainer }} width={200}>
             <Menu

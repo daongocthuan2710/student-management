@@ -1,0 +1,22 @@
+import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import { QUERY_KEYS } from "../../../../../../constants/queries";
+import { OptionHasDefault } from "../../../../../../types/ReactQuery";
+import { City, ListParams, ListResponse } from "../../../../../models";
+import cityApi from "../../../../../../api/cityApi";
+
+type TGetListCityProps<T> = {
+  filterSetting?: ListParams;
+  options?: Omit<UseQueryOptions<unknown, unknown, T, any[]>, OptionHasDefault>;
+};
+
+export function useGetListCities<T = ListResponse<City>>(
+  props?: TGetListCityProps<T>
+) {
+  // Props
+  const { filterSetting, options } = props || {};
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_LIST_CITIES, filterSetting],
+    queryFn: () => cityApi.getAll(filterSetting || {_page: 1, _limit: 10}),
+    ...options,
+  });
+}

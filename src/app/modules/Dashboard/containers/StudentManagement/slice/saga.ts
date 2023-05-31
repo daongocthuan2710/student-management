@@ -21,6 +21,7 @@ import {
   TDeleteStudentListPayload,
   TGetStudentListPayload,
 } from "../types";
+
 import {
   City,
   ListParams,
@@ -33,13 +34,14 @@ import {
 // Call Apis
 import cityApi from "../../../../../../api/cityApi";
 import studentApi from "../../../../../../api/studentApi";
+import { ROUTES } from "../../../../../../constants/routes";
 
 function* createStudent(action: TAction<TCreateStudent>) {
   try {
     yield put(studentActions.setCreateLoading(true));
     const data: Student = yield call(studentApi.add, action.payload);
     if (data !== undefined) {
-      yield put(push("/dashboard/students"));
+      yield put(push(ROUTES.STUDENT.path));
       message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
     }
     yield put(studentActions.setCreateLoading(false));
@@ -71,7 +73,7 @@ function* updateStudent(action: TAction<TUpdateStudentListPayload>) {
     yield put(studentActions.setUpdateLoading(true));
     const data: Student = yield call(studentApi.update, action.payload);
     if (data !== undefined) {
-      yield put(push("/dashboard/students"));
+      yield put(push(ROUTES.STUDENT.path));
       message.success(MESSAGE.UPDATE_SUCCESS, MESSAGE.DURATION);
     }
     yield put(studentActions.setUpdateLoading(false));
@@ -109,7 +111,7 @@ function* fetchStudentList(action: TAction<ListParams>) {
 
 function* fetchCityList() {
   try {
-    const response: ListResponse<TCity> = yield call(cityApi.getAll);
+    const response: ListResponse<TCity> = yield call(cityApi.getAll, {});
     // Map type TStudent to class Student
     if (response && response.data) {
       const data: ListResponse<City> = {

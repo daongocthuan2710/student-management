@@ -14,6 +14,8 @@ export const DashboardHeader = styled(Header)`
   }
 
   & h1 {
-    color: white;
+    & a {
+      color: white !important;
+    }
   }
 `;

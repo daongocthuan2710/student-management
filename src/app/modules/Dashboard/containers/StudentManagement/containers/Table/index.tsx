@@ -1,12 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // Libs
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import {
-  selectStudentDeleteLoading,
-  // Slice
-} from "../../slice";
+import {useState } from "react";
+import { Link, generatePath } from "react-router-dom";
 
 // Ant Libs
 import { Modal, Space, Table, Tag } from "antd";
@@ -17,12 +12,10 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 
-// Constants
-import { ACTIONS } from "../../slice/sagaActions";
-
 // Hooks
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
 import { useGetListStudents } from "../../hooks/useGetListStudents";
+import { useDeleteStudent } from "../../hooks/useDeleteStudent";
+import { ROUTES } from "../../../../../../../constants/routes";
 
 type TRecord = {
   key?: string;
@@ -39,12 +32,11 @@ type TRecord = {
 export interface StudentProps {}
 
 function StudentTable(props: StudentProps) {
-  const dispatch = useAppDispatch();
-  // const listedLoading = useAppSelector(selectStudentListLoading);
-  const deletedLoading = useAppSelector(selectStudentDeleteLoading);
-  // const { data, pagination } = useAppSelector(selectStudentList);
+  // Delete Student
   const [open, setOpen] = useState(false);
   const [studentId, setStudentId] = useState("");
+  const {mutate, isLoading: isDeleteLoading} = useDeleteStudent()
+  // Get List of students
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const { data: list, isLoading } = useGetListStudents({
@@ -116,7 +108,7 @@ function StudentTable(props: StudentProps) {
       key: "action",
       render: (_, { key }) => (
         <Space size="middle">
-          <Link to={`/dashboard/students/edit-student/${key}`}>
+          <Link to={generatePath(ROUTES.STUDENT_UPDATE.path, {id:  key})}>
             Edit <EditOutlined />
           </Link>
           <a onClick={() => showModal(key)}>
@@ -133,17 +125,13 @@ function StudentTable(props: StudentProps) {
   };
 
   const handleRemoveStudent = () => {
-    dispatch({ type: ACTIONS.DELETE_STUDENT, payload: { id: studentId } });
+    mutate(studentId)
     setOpen(false);
   };
 
   const handleFetchData = (page: number, pageSize: number) => {
     setPage(page);
     setLimit(pageSize);
-    // dispatch({
-    //   type: ACTIONS.FETCH_STUDENT_DATA,
-    //   payload: { page: page, limit: pageSize },
-    // });
   };
 
   const studentList: TRecord[] = data.map((item) => ({
@@ -158,15 +146,11 @@ function StudentTable(props: StudentProps) {
     updatedAt: item.updatedAt,
   }));
 
-  useEffect(() => {
-    // dispatch({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {} });
-  }, [dispatch]);
-
   return (
     <>
       <div style={{ padding: "15px" }}>
         <Link
-          to="/dashboard/students/create-new-student"
+          to={ROUTES.STUDENT_CREATE.path}
           style={{ fontSize: "25px" }}
         >
           <UserAddOutlined />
@@ -181,7 +165,8 @@ function StudentTable(props: StudentProps) {
           current: pagination._page || 1,
           position: ["bottomCenter"],
           total: pagination._totalRows || 0,
-          showSizeChanger: true,
+          // showSizeChanger: true,
+          defaultPageSize: 1,
           onChange: (current, pageSize) => handleFetchData(current, pageSize),
         }}
       />
@@ -190,9 +175,9 @@ function StudentTable(props: StudentProps) {
         okText="Yes"
         cancelText="No"
         width="300px"
-        open={open || deletedLoading}
+        open={open || isDeleteLoading}
         onOk={handleRemoveStudent}
-        confirmLoading={deletedLoading}
+        confirmLoading={isDeleteLoading}
         onCancel={() => setOpen(false)}
       ></Modal>
     </>

@@ -1,16 +1,23 @@
-import { TCity } from "../app/models";
-import { ListResponse } from "../types/common";
+import { City, TCity } from "../app/models";
+import { ListParams, ListResponse, PagingnationParams } from "../types/common";
 import axiosClient from "./axiosClient";
 
+const baseUrl = "/cities"
+
 const cityApi = {
-  getAll(): Promise<ListResponse<TCity>> {
-    const url = "/cities";
-    return axiosClient.get(url, {
-      params: {
-        _page: 1,
-        _limit: 10,
-      },
-    });
+  async getAll(params: ListParams): Promise<ListResponse<City>> {
+    const url = baseUrl;
+    const response = await axiosClient.get(url, {params});
+
+    const data: TCity[] = response.data.data || [];
+    const pagination: PagingnationParams = response.data.pagination || {};
+
+    const ListResponse: ListResponse<City> = {
+      data: data.map((city) => new City(city)),
+      pagination: pagination,
+    };
+
+    return ListResponse;
   },
 };
 

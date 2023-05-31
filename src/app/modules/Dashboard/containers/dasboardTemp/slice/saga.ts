@@ -46,7 +46,7 @@ function* fetchLowestStudentList() {
 
 function* fetchRankingbyCity() {
   // Fetch city List
-  const { data: cityList }: ListResponse<City> = yield call(cityApi.getAll);
+  const { data: cityList }: ListResponse<City> = yield call(cityApi.getAll, {});
 
   // Fetch ranking per city
   const callList = cityList.map((item) =>

@@ -8,6 +8,7 @@ import {
   TCreateStudent,
 } from "../app/models";
 import { Student, TStudent } from "../app/models/student";
+import { TUpdateStudent } from "../app/modules/Dashboard/containers/StudentManagement/containers/UpdateStudentInfo/type";
 
 const baseUrl = "/students";
 
@@ -27,9 +28,11 @@ const studentApi = {
     return ListResponse;
   },
 
-  getById(id: string): Promise<TStudent> {
+  async getById(id: string): Promise<Student> {
     const url = `${baseUrl}/${id}`;
-    return axiosClient.get(url);
+    const response = await axiosClient.get(url);
+    const student : Student = new Student(response.data)
+    return student;
   },
 
   add(data: TCreateStudent): Promise<TStudent> {
@@ -37,7 +40,7 @@ const studentApi = {
     return axiosClient.post(url, data);
   },
 
-  update({ data, id }: { data: {}; id: String }): Promise<TStudent> {
+  update({ data, id }: TUpdateStudent): Promise<TStudent> {
     const url = `${baseUrl}/${id}`;
     return axiosClient.patch(url, data);
   },

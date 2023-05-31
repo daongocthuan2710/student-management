@@ -25,26 +25,17 @@ import { TCreateStudent } from "../../../../../../models";
 import { ACTIONS } from "../../slice/sagaActions";
 import { MESSAGE } from "../../../../../../../constants";
 
-// Slices
-import { selectCityList } from "../../slice";
-
 // Styled
 import { CenterBlock, FormCustom } from "../../../../../styled";
+import { useGetListCities } from "../../hooks/useGetListCities";
 
 export default function CreateNewStudent() {
   const dispatch = useAppDispatch();
-  // const loading = useAppSelector(selectStudentCreateLoading);
-  const { data: cityList } = useAppSelector(selectCityList);
-  const { mutate, isLoading, isError, isSuccess } = useCreateStudent();
+    // Get List Cities
+    const {data: cities} = useGetListCities()
+    const cityList = cities?.data || []
+  const { mutate, isLoading} = useCreateStudent();
 
-  if (isSuccess) {
-    message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
-    dispatch(push("/dashboard/students"));
-  }
-
-  if (isError) {
-    message.success(MESSAGE.CREATE_FAILED, MESSAGE.DURATION);
-  }
   useEffect(() => {
     dispatch({ type: ACTIONS.FETCH_CITY_DATA });
   }, [dispatch]);
@@ -94,7 +85,7 @@ export default function CreateNewStudent() {
           <Form.Item
             label="City"
             name="city"
-            initialValue="Hồ Chí Minh"
+            initialValue="hcm"
             rules={[{ required: true, message: "Please choose the city!" }]}
           >
             <Select>

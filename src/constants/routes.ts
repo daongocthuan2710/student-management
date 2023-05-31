@@ -39,7 +39,7 @@ export const ROUTES = {
   STUDENT_UPDATE: {
     key: "edit-student",
     name: "Edit Student",
-    path: "/dashboard/students/edit-student/:id",
+    path: "/dashboard/students/update-student/:id",
     exact: false,
     isPrivate: true,
   },
