@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Spin, Form, Input, Checkbox } from "antd";
 import { authActions, selectIslogging } from "./slice";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { LoginBlockWrapper} from "./styled";
+import { FormCustom } from "../styled";
 export interface LoginProps {}
 
 export function Login(props: LoginProps) {
@@ -26,26 +28,11 @@ export function Login(props: LoginProps) {
 
   return (
     <>
-      <div
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#f5f5f5",
-        }}
-      >
-        <Form
+      <LoginBlockWrapper>
+        <FormCustom
           name="basic"
           labelCol={{ span: 8 }}
           wrapperCol={{ span: 16 }}
-          style={{
-            maxWidth: 600,
-            backgroundColor: "white",
-            padding: "15px",
-            borderRadius: "15px",
-          }}
           initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -80,8 +67,8 @@ export function Login(props: LoginProps) {
               {isLogging && <Spin className="b" />} Login
             </Button>
           </Form.Item>
-        </Form>
-      </div>
+        </FormCustom>
+      </LoginBlockWrapper>
     </>
   );
 }

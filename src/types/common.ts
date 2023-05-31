@@ -1,3 +1,6 @@
+import { Student } from "../app/models";
+
+
 export type PagingnationParams = {
     _limit: number,
     _page: number,
@@ -16,3 +19,6 @@ export interface ListParams{
     _order?: 'asc' | 'desc',
     [key: string]: any;
 }
+
+
+export type TCreateStudent = Omit<Student, "id" | "createdAt" | "updatedAt" | "model">;

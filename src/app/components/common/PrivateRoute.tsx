@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-import { STORAGE } from "../../constants/storage";
+import { STORAGE } from "../../../constants/storage";
 
 export interface PrivateRouteProps extends RouteProps {}
 

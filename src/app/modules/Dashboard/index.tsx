@@ -18,10 +18,11 @@ import type { MenuProps } from "antd";
 import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
 
 // Components
-import PrivateRoute from "../../../components/common/PrivateRoute";
+import PrivateRoute from "../../components/common/PrivateRoute";
 
 // Constants
 import dashboardRoutes from "./routes";
+import { DashboardHeader } from "./styled";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -63,15 +64,9 @@ export function Dashboard(props: DashboardProps) {
   const dispatch = useAppDispatch();
   return (
     <Layout>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <h1 style={{ color: "white" }}>Student Management</h1>
+      <DashboardHeader>
+        <div className="_title">
+          <h1>Student Management</h1>
           <Menu
             style={{ marginLeft: "15px" }}
             theme="dark"
@@ -83,7 +78,7 @@ export function Dashboard(props: DashboardProps) {
         <Button style={{}} onClick={() => dispatch(authActions.logout())}>
           Logout
         </Button>
-      </Header>
+      </DashboardHeader>
       <Content style={{ padding: "0 50px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>

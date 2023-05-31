@@ -9,6 +9,7 @@ import {
   selectStudentUpdate,
   selectStudentUpdateLoading,
 } from "../../slice";
+import { FormCustom, CenterBlock } from "../../../../../styled";
 
 export default function UpdateStudentInfo() {
   const dispatch = useAppDispatch();
@@ -44,23 +45,16 @@ export default function UpdateStudentInfo() {
   return (
     <>
       {getLoading ? (
-        <div
-          style={{
-            height: "40vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <CenterBlock>
           <Spin />
-        </div>
+        </CenterBlock>
       ) : (
-        <div style={{ maxWidth: 600 }}>
-          <h1 style={{ textAlign: "center" }}>Edit Student</h1>
-          <Form
+        <CenterBlock>
+          <h1 className="_title">Edit Student</h1>
+          <FormCustom
             name="basic"
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 18 }}
             layout="horizontal"
             initialValues={{ remember: true }}
             onFinish={onFinish}
@@ -93,10 +87,13 @@ export default function UpdateStudentInfo() {
               rules={[{ required: true, message: "Please choose the city!" }]}
             >
               <Select>
-                {cityList.length > 0 ?
-                cityList.map((item) => (
-                  <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                )) : ''}    
+                {cityList.length > 0
+                  ? cityList.map((item) => (
+                      <Select.Option key={item.id} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    ))
+                  : ""}
               </Select>
             </Form.Item>
             <Form.Item
@@ -115,7 +112,7 @@ export default function UpdateStudentInfo() {
             >
               <InputNumber />
             </Form.Item>
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
               <Button type="primary" htmlType="submit" disabled={updateLoading}>
                 {updateLoading && (
                   <>
@@ -125,8 +122,8 @@ export default function UpdateStudentInfo() {
                 Edit Now
               </Button>
             </Form.Item>
-          </Form>
-        </div>
+          </FormCustom>
+        </CenterBlock>
       )}
     </>
   );

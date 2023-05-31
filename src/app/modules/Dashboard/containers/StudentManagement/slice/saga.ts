@@ -16,8 +16,6 @@ import { MESSAGE } from "../../../../../../constants";
 
 // Types
 import {
-  TCreateStudentPayload,
-  TFetchStudentListPayload,
   TAction,
   TUpdateStudentListPayload,
   TDeleteStudentListPayload,
@@ -25,17 +23,18 @@ import {
 } from "../types";
 import {
   City,
+  ListParams,
   ListResponse,
   Student,
   TCity,
-  TStudent,
+  TCreateStudent,
 } from "../../../../../models";
 
 // Call Apis
 import cityApi from "../../../../../../api/cityApi";
 import studentApi from "../../../../../../api/studentApi";
 
-function* createStudent(action: TAction<TCreateStudentPayload>) {
+function* createStudent(action: TAction<TCreateStudent>) {
   try {
     yield put(studentActions.setCreateLoading(true));
     const data: Student = yield call(studentApi.add, action.payload);
@@ -56,7 +55,7 @@ function* deleteStudent(action: TAction<TDeleteStudentListPayload>) {
     yield put(studentActions.setDeleteLoading(true));
     const data: Student = yield call(studentApi.delete, action.payload.id);
     if (data !== undefined) {
-      yield put({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {}});
+      yield put({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {} });
       message.success(MESSAGE.DELETE_SUCCESS, MESSAGE.DURATION);
     }
     yield put(studentActions.setDeleteLoading(false));
@@ -83,7 +82,7 @@ function* updateStudent(action: TAction<TUpdateStudentListPayload>) {
   }
 }
 
-function* fetchStudentList(action: TAction<TFetchStudentListPayload>) {
+function* fetchStudentList(action: TAction<ListParams>) {
   try {
     yield put(studentActions.setListLoading(true));
     const {
@@ -93,20 +92,14 @@ function* fetchStudentList(action: TAction<TFetchStudentListPayload>) {
       sort = "updatedAt",
     } = action.payload;
 
-    const response: ListResponse<TStudent> = yield call(studentApi.getAll, {
+    const data: ListResponse<Student> = yield call(studentApi.getAll, {
       _page: page,
       _limit: limit,
       _order: order,
       _sort: sort,
     });
-    // Map type TStudent to class Student
-    if (response && response.data) {
-      const data: ListResponse<Student> = {
-        data: response.data.map((student) => new Student(student)),
-        pagination: response.pagination,
-      };
-      yield put(studentActions.setStudentList(data));
-    }
+
+    yield put(studentActions.setStudentList(data));
     yield put(studentActions.setListLoading(false));
   } catch (err) {
     console.log("Failed to fetch student data", err);

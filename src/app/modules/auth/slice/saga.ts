@@ -25,7 +25,6 @@ function* handleLogin(payload: LoginPayload) {
 function* handleLogout() {
   try {
     delay(100);
-    console.log("Handle Logout");
     localStorage.removeItem(STORAGE.ACCESS_TOKEN);
     // Redirect to Login
     yield put(push("/login"));
@@ -36,7 +35,6 @@ function* handleLogout() {
 
 function* watchLoginFlow() {
   try {
-    console.log("Watch Login");
     while (true) {
       const isLoggedIn = Boolean(localStorage.getItem(STORAGE.ACCESS_TOKEN));
 

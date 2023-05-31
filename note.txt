@@ -1,3 +1,2 @@
-- Refactor structure
-- Chuyển type từ models/common sang types/common
-- Chỗ import của mỗi file group lại 
+- react beautiful DND draft drop
+- NestJS create apis todoList

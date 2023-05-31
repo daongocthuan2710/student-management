@@ -1,46 +1,56 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+// Libs
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
+import { Link } from "react-router-dom";
 
-// Slice
 import {
   selectStudentDeleteLoading,
-  selectStudentList,
-  selectStudentListLoading,
+  // Slice
 } from "../../slice";
 
 // Ant Libs
-import { Modal, Space, Table, Tag} from "antd";
+import { Modal, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
   DeleteOutlined,
   EditOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+
+// Constants
 import { ACTIONS } from "../../slice/sagaActions";
 
+// Hooks
+import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
+import { useGetListStudents } from "../../hooks/useGetListStudents";
+
 type TRecord = {
-  key: string;
+  key?: string;
   name: string;
   age: number;
   mark: number;
   gender: "male" | "female" | "";
   city: string;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
+  tags?: string[];
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export interface StudentProps {}
 
 function StudentTable(props: StudentProps) {
   const dispatch = useAppDispatch();
-  const listedLoading = useAppSelector(selectStudentListLoading);
+  // const listedLoading = useAppSelector(selectStudentListLoading);
   const deletedLoading = useAppSelector(selectStudentDeleteLoading);
-  const { data, pagination } = useAppSelector(selectStudentList);
+  // const { data, pagination } = useAppSelector(selectStudentList);
   const [open, setOpen] = useState(false);
   const [studentId, setStudentId] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const { data: list, isLoading } = useGetListStudents({
+    filterSetting: { _page: page, _limit: limit },
+  });
+  const { data, pagination } = list || { data: [], pagination: {} };
 
   const columns: ColumnsType<TRecord> = [
     {
@@ -117,8 +127,8 @@ function StudentTable(props: StudentProps) {
     },
   ];
 
-  const showModal = (id: string) => {
-    setStudentId(id);
+  const showModal = (id?: string) => {
+    setStudentId(id || "");
     setOpen(true);
   };
 
@@ -128,10 +138,12 @@ function StudentTable(props: StudentProps) {
   };
 
   const handleFetchData = (page: number, pageSize: number) => {
-    dispatch({
-      type: ACTIONS.FETCH_STUDENT_DATA,
-      payload: { page: page, limit: pageSize },
-    });
+    setPage(page);
+    setLimit(pageSize);
+    // dispatch({
+    //   type: ACTIONS.FETCH_STUDENT_DATA,
+    //   payload: { page: page, limit: pageSize },
+    // });
   };
 
   const studentList: TRecord[] = data.map((item) => ({
@@ -147,9 +159,7 @@ function StudentTable(props: StudentProps) {
   }));
 
   useEffect(() => {
-    dispatch(() => {
-      dispatch({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {} });
-    });
+    // dispatch({ type: ACTIONS.FETCH_STUDENT_DATA, payload: {} });
   }, [dispatch]);
 
   return (
@@ -165,12 +175,12 @@ function StudentTable(props: StudentProps) {
       <Table
         columns={columns}
         dataSource={studentList}
-        loading={listedLoading}
+        loading={isLoading}
         pagination={{
-          pageSize: pagination._limit,
-          current: pagination._page,
+          pageSize: pagination._limit || 10,
+          current: pagination._page || 1,
           position: ["bottomCenter"],
-          total: pagination._totalRows,
+          total: pagination._totalRows || 0,
           showSizeChanger: true,
           onChange: (current, pageSize) => handleFetchData(current, pageSize),
         }}

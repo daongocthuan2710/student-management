@@ -5,18 +5,32 @@ import { store } from "./store/store";
 
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+
+// Navigation
 import { ConnectedRouter } from "connected-react-router";
+
+// Utils
 import { history } from "./utils";
 import App from "./app/modules";
 
+// Libs
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 const container = document.getElementById("root")!;
 const root = createRoot(container);
+
+// Create a client
+const queryClient = new QueryClient();
 
 root.render(
   // <React.StrictMode>
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
     </ConnectedRouter>
   </Provider>
   // </React.StrictMode>

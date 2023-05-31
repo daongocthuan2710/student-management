@@ -13,11 +13,12 @@ POST {{baseUrl}}/students
 Content-Type: application/json
 
 {
-    "name": "new one",
+    "name": "new th",
     "age": 27,
     "mark": 9.5,
     "gender": "Male",
-    "city": "pt"
+    "city": "pt",
+    "tags": ["nice", "dev"]
 }
 ###
 # @name updateStudent

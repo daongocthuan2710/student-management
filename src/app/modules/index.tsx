@@ -4,7 +4,7 @@ import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 
 // Components
-import PrivateRoute from "../../components/common/PrivateRoute";
+import PrivateRoute from "../components/common/PrivateRoute";
 
 // Routes
 import layoutRoutes from "./routes";
@@ -19,7 +19,7 @@ function App() {
         if (isPrivate) {
           return (
             <PrivateRoute
-              key={key} 
+              key={key}
               path={path}
               exact={exact}
               component={component}

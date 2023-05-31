@@ -1,10 +1,10 @@
 import React from "react";
 
 //  Navigation
-import {Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 
 // Components
-import PrivateRoute from "../../../../../components/common/PrivateRoute";
+import PrivateRoute from "../../../../components/common/PrivateRoute";
 
 // Constants
 import studentManagementRoutes from "./routes";

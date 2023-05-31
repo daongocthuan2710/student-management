@@ -1,33 +1,59 @@
-import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
+// Libs
 import React, { useEffect } from "react";
+import { push } from "connected-react-router";
+
+// Ant
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Radio,
+  Select,
+  Spin,
+  message,
+} from "antd";
+
+// Hooks
 import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
-import { Student } from "../../../../../../models";
+import { useCreateStudent } from "../../hooks/useCreateStudent";
+
+// Types
+import { TCreateStudent } from "../../../../../../models";
+
+// Const
 import { ACTIONS } from "../../slice/sagaActions";
-import { selectCityList, selectStudentCreateLoading } from "../../slice";
+import { MESSAGE } from "../../../../../../../constants";
+
+// Slices
+import { selectCityList } from "../../slice";
+
+// Styled
+import { CenterBlock, FormCustom } from "../../../../../styled";
 
 export default function CreateNewStudent() {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectStudentCreateLoading);
+  // const loading = useAppSelector(selectStudentCreateLoading);
   const { data: cityList } = useAppSelector(selectCityList);
+  const { mutate, isLoading, isError, isSuccess } = useCreateStudent();
 
+  if (isSuccess) {
+    message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
+    dispatch(push("/dashboard/students"));
+  }
+
+  if (isError) {
+    message.success(MESSAGE.CREATE_FAILED, MESSAGE.DURATION);
+  }
   useEffect(() => {
     dispatch({ type: ACTIONS.FETCH_CITY_DATA });
   }, [dispatch]);
 
-  const onFinish = (values: Student) => {
-    const data: Student = {
-      name: values.name,
-      age: values.age,
-      mark: values.mark,
-      gender: values.gender,
-      city: values.city,
-      id: values.id,
-      tags: values.tags,
-      createdAt: values.createdAt,
-      updatedAt: values.updatedAt,
-      model: values.model,
-    };
-    dispatch({ type: ACTIONS.CREATE_NEW_STUDENT, payload: data });
+  const onFinish = (values: unknown) => {
+    const data: TCreateStudent = values as TCreateStudent;
+    mutate(data);
+
+    // dispatch({ type: ACTIONS.CREATE_NEW_STUDENT, payload: data });
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -36,16 +62,16 @@ export default function CreateNewStudent() {
 
   return (
     <>
-      <div style={{ maxWidth: 600 }}>
-        <h1 style={{ textAlign: "center" }}>Create New Student</h1>
-        <Form
+      <CenterBlock>
+        <h1 className="_title">Create New Student</h1>
+        <FormCustom
           name="basic"
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 14 }}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
           layout="horizontal"
           initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+          onFinish={(values) => onFinish(values)}
+          onFinishFailed={() => onFinishFailed}
           autoComplete="off"
         >
           <Form.Item
@@ -72,11 +98,14 @@ export default function CreateNewStudent() {
             rules={[{ required: true, message: "Please choose the city!" }]}
           >
             <Select>
-            {cityList.length > 0 ?
-            cityList.map((item) => (
-              <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-            )) : ''}    
-          </Select>
+              {cityList.length > 0
+                ? cityList.map((item) => (
+                    <Select.Option key={item.id} value={item.id}>
+                      {item.name}
+                    </Select.Option>
+                  ))
+                : ""}
+            </Select>
           </Form.Item>
           <Form.Item
             label="Age"
@@ -92,9 +121,9 @@ export default function CreateNewStudent() {
           >
             <InputNumber />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit" disabled={loading}>
-              {loading && (
+          <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
+            <Button type="primary" htmlType="submit" disabled={isLoading}>
+              {isLoading && (
                 <>
                   <Spin /> &ensp;
                 </>
@@ -102,8 +131,8 @@ export default function CreateNewStudent() {
               Create New
             </Button>
           </Form.Item>
-        </Form>
-      </div>
+        </FormCustom>
+      </CenterBlock>
     </>
   );
 }

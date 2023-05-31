@@ -11,6 +11,14 @@ import { Login } from "./auth";
 
 const layoutRoutes: Routes = [
   {
+    key: ROUTES.HOME.key,
+    name: ROUTES.HOME.name,
+    path: ROUTES.HOME.path,
+    exact: ROUTES.HOME.exact,
+    isPrivate: ROUTES.HOME.isPrivate,
+    component: Dashboard,
+  },
+  {
     key: ROUTES.LOGIN.key,
     name: ROUTES.LOGIN.name,
     path: ROUTES.LOGIN.path,

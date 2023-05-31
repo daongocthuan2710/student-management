@@ -2,7 +2,7 @@ export const ROUTES = {
   HOME: {
     key: "home",
     name: "Home",
-    path: "/home",
+    path: "/",
     exact: true,
     isPrivate: false,
   },
