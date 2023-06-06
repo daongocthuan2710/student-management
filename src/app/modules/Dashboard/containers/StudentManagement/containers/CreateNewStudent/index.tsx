@@ -1,44 +1,24 @@
 // Libs
-import React, { useEffect } from "react";
-import { push } from "connected-react-router";
+import React from "react";
 
 // Ant
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Spin,
-  message,
-} from "antd";
+import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 
 // Hooks
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
-import { useCreateStudent } from "../../hooks/useCreateStudent";
+import { useCreateStudent } from "../../../../../../queries/Student/useCreateStudent";
 
 // Types
 import { TCreateStudent } from "../../../../../../models";
 
-// Const
-import { ACTIONS } from "../../slice/sagaActions";
-import { MESSAGE } from "../../../../../../../constants";
-
 // Styled
 import { CenterBlock, FormCustom } from "../../../../../styled";
-import { useGetListCities } from "../../hooks/useGetListCities";
+import { useGetListCities } from "../../../../../../queries/Student/useGetListCities";
 
 export default function CreateNewStudent() {
-  const dispatch = useAppDispatch();
-    // Get List Cities
-    const {data: cities} = useGetListCities()
-    const cityList = cities?.data || []
-  const { mutate, isLoading} = useCreateStudent();
-
-  useEffect(() => {
-    dispatch({ type: ACTIONS.FETCH_CITY_DATA });
-  }, [dispatch]);
+  // Get List Cities
+  const { data: cities } = useGetListCities();
+  const cityList = cities?.data || [];
+  const { mutate, isLoading } = useCreateStudent();
 
   const onFinish = (values: unknown) => {
     const data: TCreateStudent = values as TCreateStudent;

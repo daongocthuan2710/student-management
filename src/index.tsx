@@ -21,7 +21,14 @@ const container = document.getElementById("root")!;
 const root = createRoot(container);
 
 // Create a client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    }
+  }
+});
 
 root.render(
   // <React.StrictMode>

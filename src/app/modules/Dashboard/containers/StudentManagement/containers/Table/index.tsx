@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 // Libs
-import {useState } from "react";
+import { useState } from "react";
 import { Link, generatePath } from "react-router-dom";
 
 // Ant Libs
@@ -13,8 +13,10 @@ import {
 } from "@ant-design/icons";
 
 // Hooks
-import { useGetListStudents } from "../../hooks/useGetListStudents";
-import { useDeleteStudent } from "../../hooks/useDeleteStudent";
+import { useGetListStudents } from "../../../../../../queries/Student/useGetListStudents";
+import { useDeleteStudent } from "../../../../../../queries/Student/useDeleteStudent";
+
+// Constants
 import { ROUTES } from "../../../../../../../constants/routes";
 
 type TRecord = {
@@ -35,15 +37,16 @@ function StudentTable(props: StudentProps) {
   // Delete Student
   const [open, setOpen] = useState(false);
   const [studentId, setStudentId] = useState("");
-  const {mutate, isLoading: isDeleteLoading} = useDeleteStudent()
+  const { mutate, isLoading: isDeleteLoading } = useDeleteStudent();
+
   // Get List of students
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: list, isLoading } = useGetListStudents({
+  const { data: list, isFetching } = useGetListStudents({
     filterSetting: { _page: page, _limit: limit },
   });
   const { data, pagination } = list || { data: [], pagination: {} };
-
+  // ************************
   const columns: ColumnsType<TRecord> = [
     {
       title: "Name",
@@ -108,7 +111,7 @@ function StudentTable(props: StudentProps) {
       key: "action",
       render: (_, { key }) => (
         <Space size="middle">
-          <Link to={generatePath(ROUTES.STUDENT_UPDATE.path, {id:  key})}>
+          <Link to={generatePath(ROUTES.STUDENT_UPDATE.path, { id: key })}>
             Edit <EditOutlined />
           </Link>
           <a onClick={() => showModal(key)}>
@@ -125,7 +128,7 @@ function StudentTable(props: StudentProps) {
   };
 
   const handleRemoveStudent = () => {
-    mutate(studentId)
+    mutate(studentId);
     setOpen(false);
   };
 
@@ -149,23 +152,20 @@ function StudentTable(props: StudentProps) {
   return (
     <>
       <div style={{ padding: "15px" }}>
-        <Link
-          to={ROUTES.STUDENT_CREATE.path}
-          style={{ fontSize: "25px" }}
-        >
+        <Link to={ROUTES.STUDENT_CREATE.path} style={{ fontSize: "25px" }}>
           <UserAddOutlined />
         </Link>
       </div>
       <Table
         columns={columns}
         dataSource={studentList}
-        loading={isLoading}
+        loading={isFetching}
         pagination={{
           pageSize: pagination._limit || 10,
           current: pagination._page || 1,
           position: ["bottomCenter"],
           total: pagination._totalRows || 0,
-          // showSizeChanger: true,
+          showSizeChanger: true,
           defaultPageSize: 1,
           onChange: (current, pageSize) => handleFetchData(current, pageSize),
         }}

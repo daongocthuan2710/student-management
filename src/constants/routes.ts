@@ -62,6 +62,23 @@ export const ROUTES = {
     isPrivate: true,
   },
 
+  // Todo List
+  TODOLIST: {
+    key: "todoList",
+    name: "Todo List",
+    path: "/dashboard/todolist",
+    exact: false,
+    isPrivate: true,
+  },
+
+  TEST: {
+    key: "test",
+    name: "Test",
+    path: "/test",
+    exact: false,
+    isPrivate: false,
+  },
+
   NOT_FOUND: {
     key: "notFound",
     name: "Not Found",

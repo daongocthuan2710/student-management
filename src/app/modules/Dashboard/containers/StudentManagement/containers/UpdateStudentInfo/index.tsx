@@ -1,29 +1,17 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { push } from "connected-react-router";
 
 // Antd
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Spin,
-  message,
-} from "antd";
+import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 
 // Hooks
 import { useAppDispatch } from "../../../../../../hooks/hooks";
-import { useUpdateStudent } from "../../hooks/useUpdateStudent";
-import { useGetStudent } from "../../hooks/useGetStudent";
-import { useGetListCities } from "../../hooks/useGetListCities";
+import { useUpdateStudent } from "../../../../../../queries/Student/useUpdateStudent";
+import { useGetStudent } from "../../../../../../queries/Student/useGetStudent";
+import { useGetListCities } from "../../../../../../queries/Student/useGetListCities";
 
 // Constants
 import { ACTIONS } from "../../slice/sagaActions";
-import { MESSAGE } from "../../../../../../../constants";
-import { ROUTES } from "../../../../../../../constants/routes";
 
 // Styled
 import { FormCustom, CenterBlock } from "../../../../../styled";
@@ -31,6 +19,8 @@ import { FormCustom, CenterBlock } from "../../../../../styled";
 // Types
 import { TUpdateStudent } from "./type";
 import { Student } from "../../../../../../models";
+import { push } from "connected-react-router";
+import { ROUTES } from "../../../../../../../constants/routes";
 
 export default function UpdateStudentInfo() {
   const dispatch = useAppDispatch();
@@ -43,16 +33,8 @@ export default function UpdateStudentInfo() {
   const { data: student = new Student({}), isLoading: getLoading } =
     useGetStudent({ id });
 
-  const { mutate, isLoading, isError, isSuccess } = useUpdateStudent();
-
-  if (isSuccess) {
-    message.success(MESSAGE.UPDATE_SUCCESS, MESSAGE.DURATION);
-    dispatch(push(ROUTES.STUDENT.path));
-  }
-
-  if (isError) {
-    message.success(MESSAGE.UPDATE_FAILED, MESSAGE.DURATION);
-  }
+  const { mutate, isLoading, variables} = useUpdateStudent();
+  console.log("variables: ", variables);
 
   const onFinish = (values: any) => {
     const oldStudent: TUpdateStudent = {
@@ -74,7 +56,7 @@ export default function UpdateStudentInfo() {
 
   return (
     <>
-      {getLoading && student === undefined ? (
+      {getLoading ? (
         <CenterBlock>
           <Spin />
         </CenterBlock>
@@ -113,7 +95,7 @@ export default function UpdateStudentInfo() {
             <Form.Item
               label="City"
               name="city"
-              initialValue="hcm"
+              initialValue={student.city}
               rules={[{ required: true, message: "Please choose the city!" }]}
             >
               <Select>
@@ -149,7 +131,7 @@ export default function UpdateStudentInfo() {
                     <Spin /> &ensp;
                   </>
                 )}{" "}
-                Edit Now
+                Update Now
               </Button>
             </Form.Item>
           </FormCustom>

@@ -6,6 +6,7 @@ import { Routes } from "../../../types/routes";
 
 // Components
 import StudentManagement from "./containers/StudentManagement";
+import { TodoList } from "./containers/TodoList";
 import Counter from "./containers/counter/Counter";
 import DashboardTemp from "./containers/dasboardTemp";
 
@@ -33,6 +34,14 @@ const dashboardRoutes: Routes = [
     exact: ROUTES.COUNTER.exact,
     isPrivate: ROUTES.COUNTER.isPrivate,
     component: Counter,
+  },
+  {
+    key: ROUTES.TODOLIST.key,
+    name: ROUTES.TODOLIST.name,
+    path: ROUTES.TODOLIST.path,
+    exact: ROUTES.TODOLIST.exact,
+    isPrivate: ROUTES.TODOLIST.isPrivate,
+    component: TodoList,
   },
 ];
 

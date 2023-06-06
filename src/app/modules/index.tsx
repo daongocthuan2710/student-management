@@ -1,7 +1,7 @@
 import React from "react";
 
 // Navigation
-import { Redirect, Route, Switch } from "react-router-dom";
+import {Route, Switch } from "react-router-dom";
 
 // Components
 import PrivateRoute from "../components/common/PrivateRoute";
@@ -10,7 +10,7 @@ import PrivateRoute from "../components/common/PrivateRoute";
 import layoutRoutes from "./routes";
 import { NotFound } from "./NotFound";
 
-function App() {
+export default function App() {
   return (
     <Switch>
       {layoutRoutes.map((route) => {
@@ -34,5 +34,3 @@ function App() {
     </Switch>
   );
 }
-
-export default App;

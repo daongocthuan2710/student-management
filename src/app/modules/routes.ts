@@ -7,6 +7,7 @@ import { Routes } from "../../types/routes";
 // Components
 import { Dashboard } from "./Dashboard";
 import { NotFound } from "./NotFound";
+import { Test } from "./Test";
 import { Login } from "./auth";
 
 const layoutRoutes: Routes = [
@@ -33,6 +34,14 @@ const layoutRoutes: Routes = [
     exact: ROUTES.DASHBOARD.exact,
     isPrivate: ROUTES.DASHBOARD.isPrivate,
     component: Dashboard,
+  },
+  {
+    key: ROUTES.TEST.key,
+    name: ROUTES.TEST.name,
+    path: ROUTES.TEST.path,
+    exact: ROUTES.TEST.exact,
+    isPrivate: ROUTES.TEST.isPrivate,
+    component: Test,
   },
   {
     key: ROUTES.NOT_FOUND.key,

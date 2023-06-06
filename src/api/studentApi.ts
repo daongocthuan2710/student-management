@@ -31,7 +31,7 @@ const studentApi = {
   async getById(id: string): Promise<Student> {
     const url = `${baseUrl}/${id}`;
     const response = await axiosClient.get(url);
-    const student : Student = new Student(response.data)
+    const student: Student = new Student(response.data);
     return student;
   },
 

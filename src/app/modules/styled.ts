@@ -12,7 +12,7 @@ export const CenterBlock = styled.div<{ $maxWidth?: number }>`
   }
 `;
 
-export const FormCustom = styled(Form)<{ $maxWidth?: number }>`
+export const FormCustom = styled(Form)<{ $maxWidth?: string | number }>`
   background-color: white;
   padding: 15px;
   border-radius: 15px;
