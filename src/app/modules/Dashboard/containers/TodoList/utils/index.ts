@@ -1,5 +1,5 @@
 // Constants
-import { authors, quotes } from "../components/mockData";
+import { authors, quotes } from "../constants/mockData";
 
 // Types
 import { TAuthor, TQuote, TQuotesByAuthor } from "../type";
@@ -7,18 +7,28 @@ import { TAuthor, TQuote, TQuotesByAuthor } from "../type";
 // So we do not have any clashes with our hardcoded ones
 let idCount = quotes.length + 1;
 
+/**
+ * Get list of quotes from given count number and assign id to each quote
+ * @param count the number of quotes
+ * @returns a list of quotes with id
+ */
 export const getQuotes = (count: number) =>
   Array.from({ length: count }, (v, k) => k).map(() => {
     const random = quotes[Math.floor(Math.random() * quotes.length)];
 
     const custom = {
       ...random,
-      id: `G${idCount++}`,
+      id: `${idCount++}`,
     };
 
     return custom;
   });
 
+/**
+ * get list of author from given count number and assign id to each author
+ * @param count the number of authors
+ * @returns a list of authors with id
+ */
 export const getAuthors = (count: number) =>
   Array.from({ length: count }, (v, k) => k).map(() => {
     const random = authors[Math.floor(Math.random() * authors.length)];
@@ -31,9 +41,20 @@ export const getAuthors = (count: number) =>
     return custom;
   });
 
+/**
+ * Returns the quotes of the given quote list that maps to the given author
+ * @param author the author of the quote list
+ * @param quotes the quote list to map
+ * @returns the quotes of the given quote list that maps to the given author
+ */
 const getQuotesByAuthor = (author: TAuthor, quotes: TQuote[]) =>
   quotes.filter((quote) => quote.author === author);
 
+/**
+ * Gennerates a quote list by authors name from a given quoteCount
+ * @param quoteCount the number of quotes to generate
+ * @returns a list of quotes generated from a given quoteCount string with author names
+ */
 export const authorQuoteMap = authors.reduce(
   (previous, author) => ({
     ...previous,
@@ -42,6 +63,11 @@ export const authorQuoteMap = authors.reduce(
   {}
 );
 
+/**
+ * Gennerates a quote list by authors name from a given quoteCount
+ * @param quoteCount the number of quotes to generate
+ * @returns a list of quotes generated from a given quoteCount string with author names
+ */
 export const generateQuoteMap = (quoteCount: number): TQuotesByAuthor =>
   authors.reduce(
     (previous, author) => ({
@@ -66,6 +92,20 @@ export const reorder = (list: any[], startIndex: number, endIndex: number) => {
   return result;
 };
 
+/**
+ * Reorders items in a quote map based on when drap-and-drop an quote item.
+ *
+ * @param {Object} params - The parameters for reordering.
+ * @param {TQuotesByAuthor} params.quoteMap - The quote map containing quotes categorized by author.
+ * @param {Object} params.source - The source location from where an item is being moved.
+ * @param {string} params.source.droppableId - The identifier of the source list or container.
+ * @param {number} params.source.index - The index of the item within the source list.
+ * @param {Object} params.destination - The destination location where the item is being moved.
+ * @param {string} params.destination.droppableId - The identifier of the destination list or container.
+ * @param {number} params.destination.index - The index at which the item will be placed within the destination list.
+ * @returns {Object} - An object with the updated quote map.
+ * @property {TQuotesByAuthor} quoteMap - The updated quote map with reordered items.
+ */
 export const reorderQuoteMap = ({
   quoteMap,
   source,
@@ -114,25 +154,3 @@ export const reorderQuoteMap = ({
     quoteMap: result,
   };
 };
-
-// export function moveBetween({ list1 :any, list2, source, destination }) {
-//   const newFirst = Array.from(list1.values);
-//   const newSecond = Array.from(list2.values);
-
-//   const moveFrom = source.droppableId === list1.id ? newFirst : newSecond;
-//   const moveTo = moveFrom === newFirst ? newSecond : newFirst;
-
-//   const [moved] = moveFrom.splice(source.index, 1);
-//   moveTo.splice(destination.index, 0, moved);
-
-//   return {
-//     list1: {
-//       ...list1,
-//       values: newFirst
-//     },
-//     list2: {
-//       ...list2,
-//       values: newSecond
-//     }
-//   };
-// }

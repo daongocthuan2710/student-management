@@ -67,7 +67,9 @@ export function Dashboard(props: DashboardProps) {
     <Layout>
       <DashboardHeader>
         <div className="_title">
-          <h1><Link to="/">Student Management</Link></h1>
+          <h1>
+            <Link to="/">Student Management</Link>
+          </h1>
           <Menu
             style={{ marginLeft: "15px" }}
             theme="dark"
@@ -110,9 +112,9 @@ export function Dashboard(props: DashboardProps) {
           </Content>
         </Layout>
       </Content>
-      <Footer style={{ textAlign: "center" }}>
+      {/* <Footer style={{ textAlign: "center", marginTop: "10px" }}>
         Ant Design ©2023 Created by Ant UED
-      </Footer>
+      </Footer> */}
     </Layout>
   );
 }

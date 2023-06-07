@@ -6,7 +6,7 @@ import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import { BoardContainer } from "../../styled";
 
 // Components
-import Column from "../Column";
+import Column from "./Column";
 
 // Types
 import { TQuotesByAuthor } from "../../type";

@@ -57,7 +57,29 @@ const princess: TAuthor = {
   },
 };
 
-export const authors: TAuthor[] = [jake, BMO, finn, princess];
+const Alen: TAuthor = {
+  id: "5",
+  name: "Alen bubblegum",
+  url: "http://adventuretime.wikia.com/wiki/Princess_Bubblegum",
+  avatarUrl: princessImg.default,
+  colors: {
+    soft: colors.P50,
+    hard: colors.N400A,
+  },
+};
+
+const Twin: TAuthor = {
+  id: "6",
+  name: "Twin bubblegum",
+  url: "http://adventuretime.wikia.com/wiki/Princess_Bubblegum",
+  avatarUrl: princessImg.default,
+  colors: {
+    soft: colors.P50,
+    hard: colors.N400A,
+  },
+};
+
+export const authors: TAuthor[] = [jake, BMO, finn, princess, Alen, Twin];
 
 export const quotes: TQuote[] = [
   {

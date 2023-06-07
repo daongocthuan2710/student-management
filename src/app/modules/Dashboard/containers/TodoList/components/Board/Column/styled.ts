@@ -34,12 +34,6 @@ export const getBackgroundColor = (
   return "#EBECF0";
 };
 
-export const DropZone = styled.div`
-  min-height: ${scrollContainerHeight}px;
-  height: auto;
-  padding-bottom: ${grid}px;
-`;
-
 export const ScrollContainer = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
@@ -51,6 +45,3 @@ export const ScrollContainer = styled.div`
     display: none;
   }
 `;
-
-/* stylelint-disable block-no-empty */
-export const CustomContainer = styled.div``;
