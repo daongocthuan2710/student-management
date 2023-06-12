@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import { message } from "antd";
 
 // Apis
-import studentApi from "../../../api/studentApi";
+import studentApi from "../../../api/students/studentApi";
 
 // Hooks
 import { useAppDispatch } from "../../hooks/hooks";

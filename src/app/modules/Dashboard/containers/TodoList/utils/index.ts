@@ -1,4 +1,5 @@
 // Constants
+import { Card } from "../../../../../models";
 import { authors, quotes } from "../constants/mockData";
 
 // Types
@@ -106,12 +107,12 @@ export const reorder = (list: any[], startIndex: number, endIndex: number) => {
  * @returns {Object} - An object with the updated quote map.
  * @property {TQuotesByAuthor} quoteMap - The updated quote map with reordered items.
  */
-export const reorderQuoteMap = ({
-  quoteMap,
+export const reorderCardMap = ({
+  cardMap,
   source,
   destination,
 }: {
-  quoteMap: TQuotesByAuthor;
+  cardMap: Card[];
   source: {
     droppableId: string;
     index: number;
@@ -121,19 +122,21 @@ export const reorderQuoteMap = ({
     index: number;
   };
 }) => {
-  const current = [...quoteMap[source.droppableId]];
-  const next = [...quoteMap[destination.droppableId]];
+  const current = cardMap.filter((card) => card.list_id === source.droppableId);
+  const next = cardMap.filter(
+    (card) => card.list_id === destination.droppableId
+  );
   const target = current[source.index];
 
   // moving to same list
   if (source.droppableId === destination.droppableId) {
     const reordered = reorder(current, source.index, destination.index);
     const result = {
-      ...quoteMap,
+      ...cardMap,
       [source.droppableId]: reordered,
     };
     return {
-      quoteMap: result,
+      cardMap: result,
     };
   }
 
@@ -145,12 +148,33 @@ export const reorderQuoteMap = ({
   next.splice(destination.index, 0, target);
 
   const result = {
-    ...quoteMap,
+    ...cardMap,
     [source.droppableId]: current,
     [destination.droppableId]: next,
   };
 
   return {
-    quoteMap: result,
+    cardMap: result,
   };
+};
+
+export const swapPosition = (
+  model: any[],
+  startIndex: number,
+  endIndex: number
+) => {
+  const itemStart = model[startIndex];
+  const itemEnd = model[endIndex];
+
+  const data = [
+    {
+      id: itemStart.id,
+      body: { position: itemEnd.position },
+    },
+    {
+      id: itemEnd.id,
+      body: { position: itemStart.position },
+    },
+  ];
+  return data;
 };

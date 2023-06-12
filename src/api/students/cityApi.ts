@@ -1,8 +1,12 @@
-import { City, TCity } from "../app/models";
-import { ListParams, ListResponse, PagingnationParams } from "../types/common";
-import axiosClient from "./axiosClient";
+import { City, TCity } from "../../app/models";
+import {
+  ListParams,
+  ListResponse,
+  PagingnationParams,
+} from "../../types/common";
+import axiosClient from "../axiosClient";
 
-const baseUrl = "/cities";
+const baseUrl = `${process.env.REACT_APP_FE_URL}/cities`;
 
 const cityApi = {
   async getAll(params: ListParams): Promise<ListResponse<City>> {

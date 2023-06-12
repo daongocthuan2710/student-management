@@ -32,8 +32,8 @@ import {
 } from "../../../../../models";
 
 // Call Apis
-import cityApi from "../../../../../../api/cityApi";
-import studentApi from "../../../../../../api/studentApi";
+import cityApi from "../../../../../../api/students/cityApi";
+import studentApi from "../../../../../../api/students/studentApi";
 import { ROUTES } from "../../../../../../constants/routes";
 
 function* createStudent(action: TAction<TCreateStudent>) {

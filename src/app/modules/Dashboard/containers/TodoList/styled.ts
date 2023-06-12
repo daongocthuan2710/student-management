@@ -42,8 +42,9 @@ export const ColumnHeader = styled.div<{ $isDragging: boolean }>`
 export const ColumnFooter = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: ${grid}px;
+  padding-top: 0;
   border-bottom-left-radius: ${borderRadius}px;
   border-bottom-right-radius: ${borderRadius}px;
   background-color: ${colors.N30};

@@ -2,7 +2,7 @@ import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../constants/queries";
 import { OptionHasDefault } from "../../../types/ReactQuery";
 import { City, ListParams, ListResponse } from "../../models";
-import cityApi from "../../../api/cityApi";
+import cityApi from "../../../api/students/cityApi";
 
 type TGetListCityProps<T> = {
   filterSetting?: ListParams;

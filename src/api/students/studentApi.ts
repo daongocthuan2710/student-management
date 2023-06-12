@@ -1,4 +1,4 @@
-import axiosClient from "./axiosClient";
+import axiosClient from "../axiosClient";
 
 // Types
 import {
@@ -6,11 +6,11 @@ import {
   ListResponse,
   PagingnationParams,
   TCreateStudent,
-} from "../app/models";
-import { Student, TStudent } from "../app/models/student";
-import { TUpdateStudent } from "../app/modules/Dashboard/containers/StudentManagement/containers/UpdateStudentInfo/type";
+} from "../../app/models";
+import { Student, TStudent } from "../../app/models/student";
+import { TUpdateStudent } from "../../app/modules/Dashboard/containers/StudentManagement/containers/UpdateStudentInfo/type";
 
-const baseUrl = "/students";
+const baseUrl = `${process.env.REACT_APP_FE_URL}/students`;
 
 const studentApi = {
   async getAll(params: ListParams): Promise<ListResponse<Student>> {

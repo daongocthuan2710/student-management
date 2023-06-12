@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { borderRadius, grid } from "../../../../../constants";
 import { DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
+import { getBackgroundColor } from "../../../styled";
 
 export const imageSize = 40;
 
-const getBackgroundColor = (
+const getBackgroundAuthorColor = (
   isDragging: boolean,
   authorColors: {
     soft: any;
@@ -31,7 +32,7 @@ const getInheritTransform = (
   isDragging: boolean
 ) => {
   return inherit && isDragging
-    ? `${inherit.transform} rotate(10deg) !important`
+    ? `${inherit.transform} rotate(5deg) !important`
     : "rotate(0deg)";
 };
 
@@ -59,6 +60,10 @@ export const Container = styled.a<{
   $colors: { hard: string; soft: string };
   $inherited: any;
 }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
   user-select: none;
   border: 2px solid transparent;
   box-sizing: border-box;
@@ -70,9 +75,13 @@ export const Container = styled.a<{
     getInheritTransform(props.$inherited, props.$isDragging)};
   border-color: ${(props) => getBorderColor(props.$isDragging, props.$colors)};
   background-color: ${(props) =>
-    getBackgroundColor(props.$isDragging, props.$colors, props.$isGroupedOver)};
+    getBackgroundAuthorColor(
+      props.$isDragging,
+      props.$colors,
+      props.$isGroupedOver
+    )};
   box-shadow: ${({ $isDragging }) =>
-    $isDragging ? `2px 2px 1px #A5ADBA` : "none"};
+    $isDragging ? `2px 2px 1px #A5ADBA` : "1px 1px 1px #A5ADBA"};
 
   /* anchor overrides */
   color: #091e42;
@@ -91,6 +100,14 @@ export const Container = styled.a<{
 
   /* flexbox */
   display: flex;
+`;
+
+export const CustomEditBlock = styled.div`
+  padding: ${grid};
+
+  &:hover {
+    ${() => getBackgroundColor(true, false)}
+  }
 `;
 
 export const Avatar = styled.img`
@@ -122,29 +139,4 @@ export const BlockQuote = styled.div`
   &::after {
     content: close-quote;
   }
-`;
-
-export const Footer = styled.div`
-  display: flex;
-  margin-top: ${grid}px;
-  align-items: center;
-`;
-
-export const Author = styled.small<{ $colors: { hard: any; soft: any } }>`
-  color: ${(props) => props.$colors.hard};
-  flex-grow: 0;
-  margin: 0;
-  background-color: ${(props) => props.$colors.soft};
-  border-radius: ${borderRadius}px;
-  font-weight: normal;
-  padding: ${grid / 2}px;
-`;
-
-export const QuoteId = styled.small`
-  flex-grow: 1;
-  flex-shrink: 1;
-  margin: 0;
-  font-weight: normal;
-  text-overflow: ellipsis;
-  text-align: right;
 `;

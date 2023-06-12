@@ -16,3 +16,10 @@ export type TQuote = {
 };
 
 export type TQuotesByAuthor = Record<string, TQuote[]>;
+
+export type TCardCreate = {
+  list_id: string;
+  title: string;
+  description: string;
+  status: boolean;
+};

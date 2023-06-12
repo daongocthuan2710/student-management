@@ -4,7 +4,7 @@ import { push } from "connected-react-router";
 import { message } from "antd";
 
 // Apis
-import studentApi from "../../../api/studentApi";
+import studentApi from "../../../api/students/studentApi";
 
 // Types
 import { TUpdateStudent } from "../../modules/Dashboard/containers/StudentManagement/containers/UpdateStudentInfo/type";
@@ -20,7 +20,7 @@ import { useAppDispatch } from "../../hooks/hooks";
 export function useUpdateStudent() {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  
+
   return useMutation({
     mutationKey: [QUERY_KEYS.UPDATE_STUDENT],
     mutationFn: studentApi.update,

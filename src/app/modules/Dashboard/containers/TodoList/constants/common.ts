@@ -4,5 +4,5 @@ export const scrollContainerMinHeight = "500px";
 
 export const DROP_TYPE = {
   COLUMN: "COLUMN",
-  QUOTE: "QUOTE",
+  CARD: "CARD",
 };

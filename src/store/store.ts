@@ -11,6 +11,7 @@ import counterReducer from "../app/modules/Dashboard/containers/counter/counterS
 import authReducer from "../app/modules/auth/slice";
 import dashboardReducer from "../app/modules/Dashboard/containers/dasboardTemp/slice";
 import studentReducer from "../app/modules/Dashboard/containers/StudentManagement/slice";
+import todoListReducer from "../app/modules/Dashboard/containers/TodoList/slice";
 
 // Saga
 import createSagaMiddleware from "redux-saga";
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   dashboard: dashboardReducer,
   student: studentReducer,
+  todoList: todoListReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

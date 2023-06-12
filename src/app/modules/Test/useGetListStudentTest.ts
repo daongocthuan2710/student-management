@@ -1,6 +1,6 @@
-import { UseQueryOptions, useInfiniteQuery} from "@tanstack/react-query";
+import { UseQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../constants/queries";
-import studentApi from "../../../api/studentApi";
+import studentApi from "../../../api/students/studentApi";
 import { OptionHasDefault } from "../../../types/ReactQuery";
 import { ListParams, ListResponse, Student } from "../../models";
 

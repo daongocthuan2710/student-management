@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 
 // Apis
-import studentApi from "../../../api/studentApi";
+import studentApi from "../../../api/students/studentApi";
 
 // Constants
 import { MESSAGE } from "../../../constants";
