@@ -113,7 +113,7 @@ const Board = ({
         return;
       }
 
-      // moving to same list
+      // Reordering card moving to same list
       if (source.droppableId === destination.droppableId) {
         const currentCards: Card[] =
           queryClient.getQueryData([
@@ -160,7 +160,7 @@ const Board = ({
 
         updateManyCardMutateAsync(cardChange);
       } else {
-        // moving to different list
+        // Reordering card moving to different list
         const currentCards: Card[] =
           queryClient.getQueryData([
             QUERY_KEYS.GET_CARDS,
