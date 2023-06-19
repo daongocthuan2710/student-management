@@ -1,7 +1,12 @@
+// Libs
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "../../../constants/queries";
 import { OptionHasDefault } from "../../../types/ReactQuery";
+
+// Types
 import { City, ListParams, ListResponse } from "../../models";
+
+// APIs
 import cityApi from "../../../api/students/cityApi";
 
 type TGetListCityProps<T> = {
@@ -16,7 +21,7 @@ export function useGetListCities<T = ListResponse<City>>(
   const { filterSetting, options } = props || {};
   return useQuery({
     queryKey: [
-      QUERY_KEYS.GET_LIST_CITIES,
+      QUERY_KEYS.GET_CITIES,
       filterSetting || { _page: 1, _limit: 10 },
     ],
     queryFn: () => cityApi.getAll(filterSetting || { _page: 1, _limit: 10 }),

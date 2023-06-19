@@ -158,6 +158,14 @@ export const reorderCardMap = ({
   };
 };
 
+/**
+ * Swaps the positions of two items in the model array.
+ *
+ * @param {Array} model - The array of items.
+ * @param {number} startIndex - The index of the item to be swapped with the item at the endIndex.
+ * @param {number} endIndex - The index of the item to be swapped with the item at the startIndex.
+ * @returns {Array} - An array containing two objects representing the swapped items.
+ */
 export const swapPosition = (
   model: any[],
   startIndex: number,

@@ -31,6 +31,10 @@ export class List extends Model<TList> {
       : undefined;
   }
 
+  set position(value: number | undefined) {
+    this.model.position = value;
+  }
+
   get status() {
     return this.model.status || undefined;
   }

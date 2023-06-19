@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { colors } from "@atlaskit/theme";
 
 // Constants
-import { borderRadius, grid } from "./constants";
+import { BORDER_RADIUS, GRID } from "./constants";
 
 // Imgs
 import { coffeeBackgroundImg } from "../../../../../assets/todoList";
@@ -20,18 +20,18 @@ export const BoardContainer = styled.div`
 `;
 
 export const ColumnContainer = styled.div`
-  margin: ${grid}px;
+  margin: ${GRID}px;
   display: flex;
   flex-direction: column;
-  border-radius: ${borderRadius}px;
+  border-radius: ${BORDER_RADIUS}px;
 `;
 
 export const ColumnHeader = styled.div<{ $isDragging: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top-left-radius: ${borderRadius}px;
-  border-top-right-radius: ${borderRadius}px;
+  border-top-left-radius: ${BORDER_RADIUS}px;
+  border-top-right-radius: ${BORDER_RADIUS}px;
   background-color: ${colors.N30};
   transition: background-color 0.2s ease;
   /* &:hover {
@@ -43,10 +43,10 @@ export const ColumnFooter = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: ${grid}px;
+  padding: ${GRID}px;
   padding-top: 0;
-  border-bottom-left-radius: ${borderRadius}px;
-  border-bottom-right-radius: ${borderRadius}px;
+  border-bottom-left-radius: ${BORDER_RADIUS}px;
+  border-bottom-right-radius: ${BORDER_RADIUS}px;
   background-color: ${colors.N30};
   transition: background-color 0.2s ease;
   /* &:hover {
@@ -56,7 +56,7 @@ export const ColumnFooter = styled.div`
 
 // $ExpectError - not sure why
 export const CustomTitle = styled.h4<{ $isDragging?: boolean }>`
-  padding: ${grid * 2}px;
+  padding: ${GRID * 2}px;
   margin: 0;
   transition: background-color ease 0.2s;
   flex-grow: 1;

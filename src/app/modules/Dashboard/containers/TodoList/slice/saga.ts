@@ -13,11 +13,11 @@ import {
   TChangePositionCardPayload,
   TChangePositionListPayload,
 } from "../types";
+import { Card } from "../../../../../models";
 
 // Call Apis
 import { listApi } from "../../../../../../api/todoList";
 import { cardApi } from "../../../../../../api/todoList/cardApi";
-import { Card } from "../../../../../models";
 
 function* handleChangePositionList(
   action: TAction<TChangePositionListPayload>
@@ -43,15 +43,15 @@ function* handleChangePositionCard(
   try {
     yield put(todoListActions.setCards(action.payload.cards));
 
-    yield all([
-      call(cardApi.update, action.payload.dataChange[0]),
-      action.payload.dataChange[1]
-        ? call(cardApi.update, action.payload.dataChange[1])
-        : "",
-    ]);
+    // yield all([
+    //   call(cardApi.update, action.payload.dataChange[0]),
+    //   action.payload.dataChange[1]
+    //     ? call(cardApi.update, action.payload.dataChange[1])
+    //     : "",
+    // ]);
 
-    const response: Card[] = yield call(cardApi.getAll, { status: true });
-    if (response) yield put(todoListActions.setCards(response));
+    // const response: Card[] = yield call(cardApi.getAll, { status: true });
+    // if (response) yield put(todoListActions.setCards(response));
   } catch (error) {
     console.log("Failed to get list", error);
   }

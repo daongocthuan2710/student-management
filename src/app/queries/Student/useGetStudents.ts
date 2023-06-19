@@ -9,7 +9,7 @@ type TGetListStudentProps<T> = {
   options?: Omit<UseQueryOptions<unknown, unknown, T, any[]>, OptionHasDefault>;
 };
 
-export function useGetListStudents<T = ListResponse<Student>>(
+export function useGetStudents<T = ListResponse<Student>>(
   props: TGetListStudentProps<T>
 ) {
   // Props
@@ -22,7 +22,7 @@ export function useGetListStudents<T = ListResponse<Student>>(
     ...restOfFilterSetting
   } = filterSetting;
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_LIST_STUDENTS, { _page, _limit, _order, _sort }],
+    queryKey: [QUERY_KEYS.GET_STUDENTS, { _page, _limit, _order, _sort }],
     queryFn: () =>
       studentApi.getAll({ _page, _limit, _order, _sort, restOfFilterSetting }),
     keepPreviousData: false,

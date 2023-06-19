@@ -23,7 +23,7 @@ export function useGetListStudentTest<T = ListResponse<Student>>(
   } = filterSetting;
 
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_LIST_STUDENTS],
+    queryKey: [QUERY_KEYS.GET_STUDENTS],
     queryFn: () => studentApi.getAll,
     getPreviousPageParam: (lastPage, pages) =>
       console.log("prePage: ", lastPage, pages, "prePages: ", pages),

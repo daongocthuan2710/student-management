@@ -5,5 +5,6 @@ export const DropZone = styled.div`
 `;
 
 export const CustomContainer = styled.div`
+  // At least 1px is required for the drop zone to work properly
   min-height: 1px;
 `;

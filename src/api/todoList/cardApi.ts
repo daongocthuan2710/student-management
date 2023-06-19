@@ -1,11 +1,12 @@
-import axiosClient from "../axiosClient";
+import axiosClient from "./axiosClient";
 
 // Types
 import { ListParams } from "../../types/common";
 import { Card, TCard } from "../../app/models";
 import { TCardCreate } from "../../app/modules/Dashboard/containers/TodoList/type";
+import { TCardChange } from "../../app/modules/Dashboard/containers/TodoList/types";
 
-const baseUrl = `${process.env.REACT_APP_BASE_LOCAL_API}/cards`;
+const baseUrl = `/cards`;
 
 export const cardApi = {
   async getAll(params?: ListParams): Promise<Card[]> {
@@ -13,7 +14,6 @@ export const cardApi = {
     const response = await axiosClient.get(url, { params });
 
     const data: TCard[] = response.data || [];
-
     const result: Card[] = data.map((card) => new Card(card));
 
     return result;
@@ -28,7 +28,7 @@ export const cardApi = {
 
     return result;
   },
-  async create(newCard: TCardCreate): Promise<Card> {
+  async add(newCard: TCardCreate): Promise<Card> {
     const url = baseUrl;
     const response = await axiosClient.post(url, newCard);
 
@@ -59,5 +59,15 @@ export const cardApi = {
     const result: Card = new Card(data);
 
     return result;
+  },
+  async updateMany(body: TCardChange): Promise<any[]> {
+    const url = baseUrl;
+    const response = await axiosClient.patch(url, body);
+    console.log("response: ", response);
+
+    const data: any[] = response.data || [];
+    // const result: List = new List(data);
+
+    return data;
   },
 };

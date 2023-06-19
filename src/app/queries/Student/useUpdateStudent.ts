@@ -39,7 +39,7 @@ export function useUpdateStudent() {
         variables.data
       );
       await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_LIST_STUDENTS, {}],
+        queryKey: [QUERY_KEYS.GET_STUDENTS, {}],
       });
 
       dispatch(push(ROUTES.STUDENT.path));

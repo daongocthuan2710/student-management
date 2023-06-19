@@ -1,39 +1,35 @@
 // Libs
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { push } from "connected-react-router";
 import { message } from "antd";
 
 // Apis
-import studentApi from "../../../api/students/studentApi";
-
-// Hooks
-import { useAppDispatch } from "../../hooks/hooks";
+import { listApi } from "../../../../api/todoList";
 
 // Constants
-import { MESSAGE } from "../../../constants";
-import { ROUTES } from "../../../constants/routes";
-import { QUERY_KEYS } from "../../../constants/queries";
+import { MESSAGE } from "../../../../constants";
+import { QUERY_KEYS } from "../../../../constants/queries";
 
-export function useCreateStudent() {
-  const dispatch = useAppDispatch();
+export function useCreateList() {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: studentApi.add,
-    onMutate: (newStudent) => {
+    mutationKey: [QUERY_KEYS.CREATE_LIST],
+    mutationFn: listApi.add,
+    onMutate: (newList) => {
       // A mutation is about to happen!
       // Optionally return a context containing data to use when for example rolling back
+      return newList;
     },
     onError: (error, variables, context) => {
       // An error happened!
-      message.success(MESSAGE.CREATE_FAILED, MESSAGE.DURATION);
+      message.error(MESSAGE.CREATE_FAILED, MESSAGE.DURATION);
     },
     onSuccess: (data, variables, context) => {
       // Boom baby!
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_STUDENTS, {}],
+        queryKey: [QUERY_KEYS.GET_LISTS, {}],
       });
       message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
-      dispatch(push(ROUTES.STUDENT.path));
     },
     onSettled: (data, error, variables, context) => {
       // Error or success... doesn't matter!

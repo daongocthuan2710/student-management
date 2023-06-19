@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 // Styled
-import { CustomContainer, DropZone } from "./styled";
+import { CustomContainer } from "./styled";
 
 // Components
 import QuoteItem from "./QuoteItem";

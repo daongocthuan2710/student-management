@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { borderRadius, grid } from "../../../../../constants";
+import { BORDER_RADIUS, GRID } from "../../../../../constants";
 import { DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
 import { getBackgroundColor } from "../../../styled";
 
@@ -38,7 +38,7 @@ const getInheritTransform = (
 
 export const CloneBadge = styled.div`
   background: #79f2c0;
-  bottom: ${grid / 2}px;
+  bottom: ${GRID / 2}px;
   border: 2px solid #57d9a3;
   border-radius: 50%;
   box-sizing: border-box;
@@ -67,10 +67,10 @@ export const Container = styled.a<{
   user-select: none;
   border: 2px solid transparent;
   box-sizing: border-box;
-  border-radius: ${borderRadius}px;
-  padding: ${grid}px;
+  border-radius: ${BORDER_RADIUS}px;
+  padding: ${GRID}px;
   min-height: ${imageSize}px;
-  margin-bottom: ${grid}px;
+  margin-bottom: ${GRID}px;
   transform: ${(props) =>
     getInheritTransform(props.$inherited, props.$isDragging)};
   border-color: ${(props) => getBorderColor(props.$isDragging, props.$colors)};
@@ -103,7 +103,7 @@ export const Container = styled.a<{
 `;
 
 export const CustomEditBlock = styled.div`
-  padding: ${grid};
+  padding: ${GRID};
 
   &:hover {
     ${() => getBackgroundColor(true, false)}
@@ -114,7 +114,7 @@ export const Avatar = styled.img`
   width: ${imageSize}px;
   height: ${imageSize}px;
   border-radius: 50%;
-  margin-right: ${grid}px;
+  margin-right: ${GRID}px;
   flex-shrink: 0;
   flex-grow: 0;
 `;

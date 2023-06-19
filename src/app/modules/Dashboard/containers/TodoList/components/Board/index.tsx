@@ -1,33 +1,42 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 // Libs
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
+
+// Antd
+import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Spin } from "antd";
 
 // Styled
 import { BoardContainer, ColumnContainer } from "../../styled";
+import { CustomAddListBlock, CustomSpan } from "./styled";
 
 // Components
 import Column from "./Column";
 
 // Types
 import { Card, List, TListCreate } from "../../../../../../models";
+import { TCardChange, TListChange } from "../../types";
 
 // Utils
 import { reorder, swapPosition } from "../../utils";
 
 // Constants
-import { DROP_TYPE, grid } from "../../constants";
-
-// Apis
-import { listApi } from "../../../../../../../api/todoList";
-import { cardApi } from "../../../../../../../api/todoList/cardApi";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/hooks";
-import { selectCard, selectList, todoListActions } from "../../slice";
+import { DROP_TYPE, GRID } from "../../constants";
 import { TODOLIST_ACTIONS } from "../../slice/sagaActions";
-import { TCardChange, TListChange } from "../../types";
-import { CustomAddListBlock, CustomSpan } from "./styled";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+
+// Hooks
+import { useAppDispatch } from "../../../../../../hooks/hooks";
+import { useGetCards } from "../../../../../../queries/TodoList/Card/useGetCards";
+import { useGetLists } from "../../../../../../queries/TodoList/List/useGetLists";
+
+// Slices
+import { useCreateList } from "../../../../../../queries/TodoList/List/useCreateList";
+import { useUpdateManyList } from "../../../../../../queries/TodoList/List/useUpdateManyList";
+import { useUpdateManyCard } from "../../../../../../queries/TodoList/Card/useUpdateManyCard";
+import { QUERY_KEYS } from "../../../../../../../constants/queries";
+import { useQueryClient } from "@tanstack/react-query";
 
 export interface BoardProps {
   withScrollableColumns?: boolean;
@@ -38,9 +47,22 @@ const Board = ({
   withScrollableColumns = false,
   isCombineEnabled = false,
 }: BoardProps) => {
-  const dispatch = useAppDispatch();
-  const lists = useAppSelector(selectList) || [];
-  const cards = useAppSelector(selectCard) || [];
+  const queryClient = useQueryClient();
+
+  // List Hooks
+  const { data: listsData } = useGetLists({
+    filterSetting: {},
+  });
+  const { mutateAsync: listMutateAsync, isLoading: isCreateListLoading } =
+    useCreateList();
+
+  const { mutateAsync: updateManyListMutateAsync } = useUpdateManyList();
+  const lists = listsData || [];
+  console.log("lists: ", lists);
+
+  // Card Hooks
+  const { mutateAsync: updateManyCardMutateAsync } = useUpdateManyCard();
+
   const [showInputAddList, setShowInputAddList] = useState<boolean>(false);
 
   const onDragEnd = (result: DropResult) => {
@@ -63,134 +85,162 @@ const Board = ({
 
       // Reordering column
       if (result.type === DROP_TYPE.COLUMN) {
-        const dataChange: TListChange[] = swapPosition(
-          lists,
-          source.index,
-          destination.index
-        );
-        const ReoderResult: List[] = reorder(
+        const dataChange: TListChange = {
+          id: lists[source.index].id,
+          body: {
+            position: destination.index,
+          },
+          params: {
+            old_position: source.index,
+          },
+        };
+
+        const listsAfterSwap: List[] = reorder(
           lists,
           source.index,
           destination.index
         );
 
-        dispatch({
-          type: TODOLIST_ACTIONS.CHANGE_POSITION_LIST,
-          payload: { dataChange: dataChange, lists: ReoderResult },
-        });
+        queryClient.setQueryData(
+          [
+            QUERY_KEYS.GET_LISTS,
+            { _order: "asc", _sort: "position", status: true },
+          ],
+          listsAfterSwap
+        );
+
+        updateManyListMutateAsync(dataChange);
         return;
       }
 
       // moving to same list
       if (source.droppableId === destination.droppableId) {
-        const currentCards = cards.filter(
-          (card) => card.list_id === source.droppableId
-        );
+        const currentCards: Card[] =
+          queryClient.getQueryData([
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: source.droppableId,
+              status: true,
+            },
+          ]) || [];
 
-        const dataChange = swapPosition(
+        const cardChange: TCardChange = {
+          id: currentCards[source.index].id,
+          old_list_id: source.droppableId,
+          body: {
+            position:
+              currentCards[destination.index].position || destination.index,
+            list_id: destination.droppableId,
+          },
+          params: {
+            old_position: currentCards[source.index].position,
+          },
+        };
+
+        const cardsAfterSwap: Card[] = reorder(
           currentCards,
           source.index,
           destination.index
         );
 
-        const reoderResult = reorderCardByList(
-          source.droppableId,
-          cards,
-          source.index,
-          destination.index
+        queryClient.setQueryData(
+          [
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: source.droppableId,
+              status: true,
+            },
+          ],
+          cardsAfterSwap
         );
 
-        dispatch({
-          type: TODOLIST_ACTIONS.CHANGE_POSITION_CARD,
-          payload: { dataChange: dataChange, cards: reoderResult },
-        });
+        updateManyCardMutateAsync(cardChange);
       } else {
-        const currentCards = cards.filter(
-          (card) => card.list_id === source.droppableId
+        // moving to different list
+        const currentCards: Card[] =
+          queryClient.getQueryData([
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: source.droppableId,
+              status: true,
+            },
+          ]) || [];
+
+        const nextCards: Card[] =
+          queryClient.getQueryData([
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: destination.droppableId,
+              status: true,
+            },
+          ]) || [];
+
+        const cardStart = currentCards[source.index];
+        cardStart.list_id = destination.droppableId;
+
+        const cardEnd = nextCards[destination.index];
+
+        currentCards.splice(source.index, 1);
+        nextCards.splice(destination.index, 0, cardStart);
+
+        queryClient.setQueryData(
+          [
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: source.droppableId,
+              status: true,
+            },
+          ],
+          currentCards
         );
 
-        let target = currentCards[source.index];
-        let endCard = currentCards[destination.index];
+        queryClient.setQueryData(
+          [
+            QUERY_KEYS.GET_CARDS,
+            {
+              _order: "asc",
+              _sort: "position",
+              list_id: destination.droppableId,
+              status: true,
+            },
+          ],
+          nextCards
+        );
 
-        // remove from original
-        let reoderResult = Array.from(cards);
-
-        const startItemIndex = cards.indexOf(target);
-        const endItemIndex = cards.indexOf(endCard);
-
-        // insert into next
-        const newCard: Card = new Card({
-          _id: target.id,
-          list_id: destination.droppableId,
-          position: destination.index,
-          status: target.status,
-          title: target.title,
-          __v: target.version,
-          description: target.description,
-          updatedAt: target.updatedAt,
-          createdAt: target.createdAt,
-        });
-
-        reoderResult.splice(startItemIndex, 1);
-        reoderResult.splice(endItemIndex, 0, newCard);
-
-        const dataChange: TCardChange[] = [
-          {
-            id: target.id,
-            list_id: target.list_id,
-            body: { position: destination.index },
-            params: { new_list_id: destination.droppableId },
+        const cardChange: TCardChange = {
+          id: cardStart.id,
+          old_list_id: source.droppableId,
+          body: {
+            position: cardEnd.position || destination.index,
+            list_id: destination.droppableId,
           },
-        ];
+          params: {
+            old_position: cardStart.position,
+          },
+        };
 
-        dispatch({
-          type: TODOLIST_ACTIONS.CHANGE_POSITION_CARD,
-          payload: { dataChange: dataChange, cards: reoderResult },
-        });
+        updateManyCardMutateAsync(cardChange);
       }
     } catch (err) {
       console.log("Can not change position", err);
     }
   };
 
-  const reorderCardByList = (
-    list_id: string,
-    cards: Card[],
-    startIndex: number,
-    endIndex: number
-  ) => {
-    const data = cards.filter((card) => card.list_id === list_id);
-    const result = Array.from(cards);
-    const startItem = data[startIndex];
-    const endItem = data[endIndex];
-    const startIndexInCards = result.indexOf(startItem);
-    const endIndexInCards = result.indexOf(endItem);
-    const [removed] = result.splice(startIndexInCards, 1);
-    result.splice(endIndexInCards, 0, removed);
-    return result;
-  };
-
-  const fetchList = async () => {
-    const response = await listApi.getAll({ status: true });
-    dispatch({
-      type: todoListActions.setLists.type,
-      payload: response,
-    });
-  };
-
-  const fetchCard = async (body: {}) => {
-    const response = await cardApi.getAll(body);
-    dispatch({
-      type: todoListActions.setCards.type,
-      payload: response,
-    });
-  };
-
   const addList = async (body: TListCreate) => {
     try {
-      const response = await listApi.create(body);
+      const response = await listMutateAsync(body);
+
       if (response) setShowInputAddList(false);
-      fetchList();
     } catch (err) {
       console.log("Failed to create new List", err);
     }
@@ -200,11 +250,6 @@ const Board = ({
     const data: TListCreate = { name: values.titleInput, status: true };
     addList(data);
   };
-
-  useEffect(() => {
-    fetchList();
-    fetchCard({ status: true });
-  }, []);
 
   return (
     <>
@@ -220,18 +265,19 @@ const Board = ({
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {lists.map((list, index) => (
-                <Column
-                  key={list.id}
-                  id={list.id}
-                  title={list.name}
-                  cards={cards.filter((card) => card.list_id === list.id)}
-                  index={index}
-                  isScrollable={withScrollableColumns}
-                  isCombineEnabled={isCombineEnabled}
-                  useClone={provided}
-                ></Column>
-              ))}
+              {lists
+                ? lists.map((list, index) => (
+                    <Column
+                      key={list.id}
+                      id={list.id}
+                      title={list.name}
+                      index={index}
+                      isScrollable={withScrollableColumns}
+                      isCombineEnabled={isCombineEnabled}
+                      useClone={provided}
+                    ></Column>
+                  ))
+                : ""}
               <ColumnContainer>
                 <CustomAddListBlock $show={showInputAddList}>
                   {!showInputAddList ? (
@@ -244,12 +290,21 @@ const Board = ({
                         <Input placeholder="Nhập tiêu đề danh sách..." />
                       </Form.Item>
                       <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          disabled={isCreateListLoading}
+                        >
+                          {isCreateListLoading && (
+                            <>
+                              <Spin /> &ensp;
+                            </>
+                          )}
                           Thêm danh sách
                         </Button>
                         <Button
                           type="ghost"
-                          style={{ marginLeft: `${grid}px` }}
+                          style={{ marginLeft: `${GRID}px` }}
                           onClick={() => setShowInputAddList(false)}
                         >
                           <CloseOutlined />

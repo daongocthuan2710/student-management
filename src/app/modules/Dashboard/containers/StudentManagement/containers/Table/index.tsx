@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link, generatePath } from "react-router-dom";
 
-// Ant Libs
+// Antd
 import { Modal, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import {
@@ -13,7 +13,7 @@ import {
 } from "@ant-design/icons";
 
 // Hooks
-import { useGetListStudents } from "../../../../../../queries/Student/useGetListStudents";
+import { useGetStudents } from "../../../../../../queries/Student/useGetStudents";
 import { useDeleteStudent } from "../../../../../../queries/Student/useDeleteStudent";
 
 // Constants
@@ -42,7 +42,7 @@ function StudentTable(props: StudentProps) {
   // Get List of students
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { data: list, isFetching } = useGetListStudents({
+  const { data: list, isFetching } = useGetStudents({
     filterSetting: { _page: page, _limit: limit },
   });
   const { data, pagination } = list || { data: [], pagination: {} };

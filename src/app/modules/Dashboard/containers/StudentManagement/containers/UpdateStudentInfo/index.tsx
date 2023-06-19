@@ -8,7 +8,7 @@ import { Button, Form, Input, InputNumber, Radio, Select, Spin } from "antd";
 import { useAppDispatch } from "../../../../../../hooks/hooks";
 import { useUpdateStudent } from "../../../../../../queries/Student/useUpdateStudent";
 import { useGetStudent } from "../../../../../../queries/Student/useGetStudent";
-import { useGetListCities } from "../../../../../../queries/Student/useGetListCities";
+import { useGetListCities } from "../../../../../../queries/Student/useGetCities";
 
 // Constants
 import { ACTIONS } from "../../slice/sagaActions";
@@ -33,7 +33,7 @@ export default function UpdateStudentInfo() {
   const { data: student = new Student({}), isLoading: getLoading } =
     useGetStudent({ id });
 
-  const { mutate, isLoading, variables} = useUpdateStudent();
+  const { mutate, isLoading, variables } = useUpdateStudent();
   console.log("variables: ", variables);
 
   const onFinish = (values: any) => {

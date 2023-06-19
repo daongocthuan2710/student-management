@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { grid } from "../../constants";
+
+// Constants
+import { GRID } from "../../constants";
 
 export const CustomWrapper = styled.div<{
   $isDraggingOver: boolean;
@@ -11,8 +13,8 @@ export const CustomWrapper = styled.div<{
   display: flex;
   flex-direction: column;
   opacity: ${({ $isDropDisabled }) => ($isDropDisabled ? 0.5 : "inherit")};
-  padding: ${grid}px;
-  border: ${grid}px;
+  padding: ${GRID}px;
+  border: ${GRID}px;
   padding-bottom: 0;
   transition: background-color 0.2s ease, opacity 0.1s ease;
   user-select: none;
@@ -24,13 +26,13 @@ export const CustomAddListBlock = styled.div<{ $show: boolean }>`
   flex-direction: column;
   background-color: ${({ $show }) =>
     $show ? getBackgroundColor(false, false) : null};
-  padding: ${grid}px;
-  border: ${grid}px;
+  padding: ${GRID}px;
+  border: ${GRID}px;
   padding-bottom: 0;
   transition: background-color 0.2s ease, opacity 0.1s ease;
   user-select: none;
   width: 250px;
-  border-radius: ${grid}px;
+  border-radius: ${GRID}px;
 `;
 
 export const CustomAddCardBlock = styled.div<{ $show: boolean }>`
@@ -39,12 +41,12 @@ export const CustomAddCardBlock = styled.div<{ $show: boolean }>`
   justify-content: space-between;
   background-color: ${({ $show }) =>
     $show ? getBackgroundColor(false, false) : null};
-  padding: ${grid}px;
-  border: ${grid}px;
+  padding: ${GRID}px;
+  border: ${GRID}px;
   transition: background-color 0.2s ease, opacity 0.1s ease;
   user-select: none;
   width: 100%;
-  border-radius: ${grid}px;
+  border-radius: ${GRID}px;
 
   &:hover {
     background-color: ${() => getBackgroundColor(true, false)};
@@ -63,9 +65,6 @@ export const CustomSpanCard = styled.span`
   cursor: pointer;
 `;
 
-/* background-color: ${(props) =>
-    getBackgroundColor(props.$isDraggingOver, props.$isDraggingFrom)}; */
-/* opacity: ${({ $isDropDisabled }) => ($isDropDisabled ? 0.5 : "inherit")}; */
 export const getBackgroundColor = (
   isDraggingOver: boolean,
   isDraggingFrom: boolean

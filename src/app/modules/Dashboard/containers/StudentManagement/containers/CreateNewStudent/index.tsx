@@ -12,7 +12,7 @@ import { TCreateStudent } from "../../../../../../models";
 
 // Styled
 import { CenterBlock, FormCustom } from "../../../../../styled";
-import { useGetListCities } from "../../../../../../queries/Student/useGetListCities";
+import { useGetListCities } from "../../../../../../queries/Student/useGetCities";
 
 export default function CreateNewStudent() {
   // Get List Cities

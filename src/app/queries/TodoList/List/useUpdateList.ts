@@ -3,32 +3,38 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 
 // Apis
-import studentApi from "../../../api/students/studentApi";
+import { listApi } from "../../../../api/todoList";
 
 // Constants
-import { MESSAGE } from "../../../constants";
-import { QUERY_KEYS } from "../../../constants/queries";
+import { MESSAGE } from "../../../../constants";
 
-export function useDeleteStudent() {
+// Hooks
+import { QUERY_KEYS } from "../../../../constants/queries";
+
+export function useUpdateList() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [QUERY_KEYS.DELETE_STUDENT],
-    mutationFn: studentApi.delete,
-    onMutate: (studentId) => {
+    mutationKey: [QUERY_KEYS.UPDATE_LIST],
+    mutationFn: listApi.update,
+    onMutate: async (oldList) => {
       // A mutation is about to happen!
       // Optionally return a context containing data to use when for example rolling back
+      return oldList;
     },
     onError: (error, variables, context) => {
       // An error happened!
-      message.success(MESSAGE.DELETE_FAILED, MESSAGE.DURATION);
+      message.error(MESSAGE.UPDATE_FAILED, MESSAGE.DURATION);
     },
     onSuccess: async (data, variables, context) => {
       // Boom baby!
+      queryClient.setQueryData([QUERY_KEYS.GET_LIST, variables.id], data);
+
       await queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_STUDENTS, {}],
+        queryKey: [QUERY_KEYS.GET_LISTS, {}],
       });
-      message.success(MESSAGE.CREATE_SUCCESS, MESSAGE.DURATION);
+
+      message.success(MESSAGE.UPDATE_SUCCESS, MESSAGE.DURATION);
     },
     onSettled: (data, error, variables, context) => {
       // Error or success... doesn't matter!

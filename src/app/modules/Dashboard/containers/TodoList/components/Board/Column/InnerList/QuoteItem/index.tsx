@@ -2,19 +2,32 @@
 // Libs
 import React, { useState } from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
+import { colors } from "@atlaskit/theme";
+
+// Antd
+import { CloseOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Input,
+  MenuProps,
+  Modal,
+  Space,
+  Spin,
+} from "antd";
 
 // Types
 import { Card } from "../../../../../../../../../models";
 
 // Styled
 import { BlockQuote, Container, Content, CustomEditBlock } from "./styled";
-import { colors } from "@atlaskit/theme";
-import { CloseOutlined, DashOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Form, Input, MenuProps, Modal, Space } from "antd";
-import { grid } from "../../../../../constants";
-import { cardApi } from "../../../../../../../../../../api/todoList/cardApi";
-import { todoListActions } from "../../../../../slice";
-import { useAppDispatch } from "../../../../../../../../../hooks/hooks";
+
+// Constants
+import { GRID } from "../../../../../constants";
+
+// Hooks
+import { useUpdateCard } from "../../../../../../../../../queries/TodoList/Card/usUpdateCard";
 
 function QuoteItem(props: {
   card: Card;
@@ -27,7 +40,10 @@ function QuoteItem(props: {
   const [isInputEditOpen, setIsInputEditOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const dispatch = useAppDispatch();
+  // Card hooks
+  const { mutateAsync: updateCardMutateAsync, isLoading: isUpdateCardLoading } =
+    useUpdateCard();
+
   function getStyle(provided: DraggableProvided, style: any) {
     if (!style) {
       return provided.draggableProps.style;
@@ -37,6 +53,36 @@ function QuoteItem(props: {
       ...style,
     };
   }
+
+  const onEditCard = async (values: any) => {
+    try {
+      const body = {
+        title: values.titleInput as string,
+      };
+
+      const response = await updateCardMutateAsync({
+        id: card.id,
+        list_id: card.list_id,
+        body: body,
+      });
+      if (response) setIsInputEditOpen(false);
+    } catch (err) {
+      console.log("Faid to update card", err);
+    }
+  };
+
+  const handleOk = async () => {
+    try {
+      const response = await updateCardMutateAsync({
+        id: card.id,
+        list_id: card.list_id,
+        body: { status: false },
+      });
+      if (response) setIsModalOpen(false);
+    } catch (err) {
+      console.log("Failed to delete card", err);
+    }
+  };
 
   const items: MenuProps["items"] = [
     {
@@ -48,49 +94,6 @@ function QuoteItem(props: {
       key: "1",
     },
   ];
-
-  const fetchCard = async () => {
-    const response = await cardApi.getAll({ status: true });
-    dispatch({
-      type: todoListActions.setCards.type,
-      payload: response,
-    });
-  };
-
-  const onFinish = async (values: any) => {
-    try {
-      const body = {
-        title: values.titleInput as string,
-      };
-
-      const response = await cardApi.update({
-        id: card.id,
-        list_id: card.list_id,
-        body: body,
-      });
-      if (response) setIsInputEditOpen(false);
-      fetchCard();
-    } catch (err) {
-      console.log("Faid to update card", err);
-      setIsInputEditOpen(false);
-    }
-  };
-
-  const handleOk = async () => {
-    try {
-      const response = await cardApi.update({
-        id: card.id,
-        list_id: card.list_id,
-        body: { status: false },
-      });
-      const cards = await cardApi.getAll({ status: true });
-      dispatch(todoListActions.setCards(cards));
-      if (response) setIsModalOpen(false);
-    } catch (err) {
-      setIsModalOpen(false);
-      console.log("Failed to delete card", err);
-    }
-  };
 
   return (
     <>
@@ -120,26 +123,33 @@ function QuoteItem(props: {
             </Content>
             <CustomEditBlock>
               <Dropdown menu={{ items }} trigger={["click"]}>
-                <a color="black">
-                  <Space>
-                    <EditOutlined />
-                  </Space>
-                </a>
+                <Space color="black">
+                  <EditOutlined />
+                </Space>
               </Dropdown>
             </CustomEditBlock>
           </>
         ) : (
-          <Form onFinish={onFinish} style={{ width: "100%" }}>
+          <Form onFinish={onEditCard} style={{ width: "100%" }}>
             <Form.Item name="titleInput">
               <Input defaultValue={card.title} />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Lưu
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={isUpdateCardLoading}
+              >
+                {isUpdateCardLoading && (
+                  <>
+                    <Spin /> &ensp;
+                  </>
+                )}
+                Lưu thẻ
               </Button>
               <Button
                 type="ghost"
-                style={{ marginLeft: `${grid}px` }}
+                style={{ marginLeft: `${GRID}px` }}
                 onClick={() => setIsInputEditOpen(false)}
               >
                 <CloseOutlined />
@@ -152,6 +162,7 @@ function QuoteItem(props: {
         title="Xóa thẻ này?"
         open={isModalOpen}
         onOk={handleOk}
+        confirmLoading={isUpdateCardLoading}
         onCancel={() => setIsModalOpen(false)}
         width={250}
       ></Modal>

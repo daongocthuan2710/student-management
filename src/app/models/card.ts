@@ -22,6 +22,10 @@ export class Card extends Model<TCard> {
     return this.model.list_id || "";
   }
 
+  set list_id(value: string) {
+    this.model.list_id = value;
+  }
+
   get title() {
     return this.model.title || "";
   }
@@ -34,6 +38,10 @@ export class Card extends Model<TCard> {
     return typeof this.model.position === "number"
       ? this.model.position
       : undefined;
+  }
+
+  set position(value: number | undefined) {
+    this.model.position = value;
   }
 
   get status() {

@@ -1,4 +1,4 @@
-import { Card, List, ListParams } from "../../../../../models";
+import { Card, List } from "../../../../../models";
 
 export type TAction<T> = {
   payload: T;
@@ -8,18 +8,23 @@ export type TAction<T> = {
 export type TListChange = {
   id: string;
   body: {
-    position: any;
+    position: number;
   };
-  params?: ListParams;
+  params?: {
+    old_position: number;
+  };
 };
 
 export type TCardChange = {
   id: string;
-  list_id: string;
+  old_list_id: string;
   body: {
-    position: any;
+    position: number;
+    list_id: string;
   };
-  params?: ListParams;
+  params?: {
+    old_position?: number;
+  };
 };
 
 export type TChangePositionListPayload = {

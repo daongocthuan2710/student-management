@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { grid } from "../../../constants";
+import { GRID } from "../../../constants";
 import { getBackgroundColor } from "../styled";
 
 const scrollContainerHeight = 500;
@@ -17,9 +17,9 @@ export const ScrollContainer = styled.div`
 `;
 
 export const CustomSettingBlock = styled.div`
-  margin-right: ${grid}px;
-  padding: ${grid}px;
-  border-radius: ${grid}px;
+  margin-right: ${GRID}px;
+  padding: ${GRID}px;
+  border-radius: ${GRID}px;
   background-color: none;
 
   &:hover {
